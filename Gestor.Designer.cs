@@ -100,6 +100,8 @@
             this.debugTxt = new System.Windows.Forms.TextBox();
             this.eliminarBtn = new System.Windows.Forms.Button();
             this.grupoConfiguracion = new System.Windows.Forms.GroupBox();
+            this.tipoConectorCombo = new System.Windows.Forms.ComboBox();
+            this.labelTipoConector = new System.Windows.Forms.Label();
             this.nombreImpresoraTxt = new System.Windows.Forms.Label();
             this.seleccionarImpresoraBtn = new System.Windows.Forms.Button();
             this.testigoServidor = new System.Windows.Forms.Label();
@@ -564,6 +566,7 @@
             this.imprimir.ToolTipText = "Reimprimir etiqueta";
             this.imprimir.UseColumnTextForButtonValue = true;
             this.imprimir.Width = 75;
+            this.imprimir.Visible = false;
             // 
             // monthCalendar1
             // 
@@ -801,14 +804,38 @@
             // 
             // grupoConfiguracion
             // 
+            this.grupoConfiguracion.Controls.Add(this.tipoConectorCombo);
+            this.grupoConfiguracion.Controls.Add(this.labelTipoConector);
             this.grupoConfiguracion.Controls.Add(this.nombreImpresoraTxt);
             this.grupoConfiguracion.Controls.Add(this.seleccionarImpresoraBtn);
             this.grupoConfiguracion.Location = new System.Drawing.Point(965, 274);
             this.grupoConfiguracion.Name = "grupoConfiguracion";
-            this.grupoConfiguracion.Size = new System.Drawing.Size(226, 91);
+            this.grupoConfiguracion.Size = new System.Drawing.Size(226, 150);
             this.grupoConfiguracion.TabIndex = 25;
             this.grupoConfiguracion.TabStop = false;
-            this.grupoConfiguracion.Text = "Impresora por defecto";
+            this.grupoConfiguracion.Text = "Configuración";
+            // 
+            // tipoConectorCombo
+            // 
+            this.tipoConectorCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.tipoConectorCombo.FormattingEnabled = true;
+            this.tipoConectorCombo.Items.AddRange(new object[] {
+            "SG",
+            "SAP"});
+            this.tipoConectorCombo.Location = new System.Drawing.Point(103, 18);
+            this.tipoConectorCombo.Name = "tipoConectorCombo";
+            this.tipoConectorCombo.Size = new System.Drawing.Size(109, 21);
+            this.tipoConectorCombo.TabIndex = 19;
+            this.tipoConectorCombo.SelectedIndexChanged += new System.EventHandler(this.tipoConectorCombo_SelectedIndexChanged);
+            // 
+            // labelTipoConector
+            // 
+            this.labelTipoConector.AutoSize = true;
+            this.labelTipoConector.Location = new System.Drawing.Point(6, 21);
+            this.labelTipoConector.Name = "labelTipoConector";
+            this.labelTipoConector.Size = new System.Drawing.Size(91, 13);
+            this.labelTipoConector.TabIndex = 18;
+            this.labelTipoConector.Text = "Tipo de conector:";
             // 
             // nombreImpresoraTxt
             // 
@@ -816,14 +843,14 @@
             this.nombreImpresoraTxt.Location = new System.Drawing.Point(9, 26);
             this.nombreImpresoraTxt.Name = "nombreImpresoraTxt";
             this.nombreImpresoraTxt.Size = new System.Drawing.Size(0, 13);
-            this.nombreImpresoraTxt.TabIndex = 18;
+            this.nombreImpresoraTxt.TabIndex = 17;
             // 
             // seleccionarImpresoraBtn
             // 
             this.seleccionarImpresoraBtn.Location = new System.Drawing.Point(6, 52);
             this.seleccionarImpresoraBtn.Name = "seleccionarImpresoraBtn";
             this.seleccionarImpresoraBtn.Size = new System.Drawing.Size(214, 32);
-            this.seleccionarImpresoraBtn.TabIndex = 17;
+            this.seleccionarImpresoraBtn.TabIndex = 18;
             this.seleccionarImpresoraBtn.Text = "Seleccionar Impresora";
             this.seleccionarImpresoraBtn.UseVisualStyleBackColor = true;
             this.seleccionarImpresoraBtn.Click += new System.EventHandler(this.seleccionarImpresoraBtn_Click);
@@ -956,6 +983,8 @@
         private System.Windows.Forms.GroupBox grupoConfiguracion;
         private System.Windows.Forms.Label nombreImpresoraTxt;
         private System.Windows.Forms.Button seleccionarImpresoraBtn;
+        private System.Windows.Forms.ComboBox tipoConectorCombo;
+        private System.Windows.Forms.Label labelTipoConector;
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.TextBox numeroPedidoTxt;
         private System.Windows.Forms.DataGridViewTextBoxColumn numero;

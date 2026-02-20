@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="ServiceAUTOSLIT" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import schemaLocation="http://10.71.1.104/WSAUTOSLIT/ServiceAUTOSLIT.svc?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://10.71.1.104/WSAUTOSLIT/ServiceAUTOSLIT.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://10.71.1.104/WSAUTOSLIT/ServiceAUTOSLIT.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/WSAUTOSLIT" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="IServiceAUTOSLIT_LecturaOrdenes_InputMessage">
+    <wsdl:part name="parameters" element="tns:LecturaOrdenes" />
+  </wsdl:message>
+  <wsdl:message name="IServiceAUTOSLIT_LecturaOrdenes_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LecturaOrdenesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServiceAUTOSLIT_LecturaLote_InputMessage">
+    <wsdl:part name="parameters" element="tns:LecturaLote" />
+  </wsdl:message>
+  <wsdl:message name="IServiceAUTOSLIT_LecturaLote_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LecturaLoteResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServiceAUTOSLIT_NotificarMudadas_InputMessage">
+    <wsdl:part name="parameters" element="tns:NotificarMudadas" />
+  </wsdl:message>
+  <wsdl:message name="IServiceAUTOSLIT_NotificarMudadas_OutputMessage">
+    <wsdl:part name="parameters" element="tns:NotificarMudadasResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServiceAUTOSLIT_LeerOperarios_InputMessage">
+    <wsdl:part name="parameters" element="tns:LeerOperarios" />
+  </wsdl:message>
+  <wsdl:message name="IServiceAUTOSLIT_LeerOperarios_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LeerOperariosResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServiceAUTOSLIT_DevolverLote_InputMessage">
+    <wsdl:part name="parameters" element="tns:DevolverLote" />
+  </wsdl:message>
+  <wsdl:message name="IServiceAUTOSLIT_DevolverLote_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DevolverLoteResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServiceAUTOSLIT_NotificarTiempos_InputMessage">
+    <wsdl:part name="parameters" element="tns:NotificarTiempos" />
+  </wsdl:message>
+  <wsdl:message name="IServiceAUTOSLIT_NotificarTiempos_OutputMessage">
+    <wsdl:part name="parameters" element="tns:NotificarTiemposResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServiceAUTOSLIT_LeerTiposParo_InputMessage">
+    <wsdl:part name="parameters" element="tns:LeerTiposParo" />
+  </wsdl:message>
+  <wsdl:message name="IServiceAUTOSLIT_LeerTiposParo_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LeerTiposParoResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServiceAUTOSLIT_EmbalarLotes_InputMessage">
+    <wsdl:part name="parameters" element="tns:EmbalarLotes" />
+  </wsdl:message>
+  <wsdl:message name="IServiceAUTOSLIT_EmbalarLotes_OutputMessage">
+    <wsdl:part name="parameters" element="tns:EmbalarLotesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServiceAUTOSLIT_LeerPlanning_InputMessage">
+    <wsdl:part name="parameters" element="tns:LeerPlanning" />
+  </wsdl:message>
+  <wsdl:message name="IServiceAUTOSLIT_LeerPlanning_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LeerPlanningResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServiceAUTOSLIT_LeerStock_InputMessage">
+    <wsdl:part name="parameters" element="tns:LeerStock" />
+  </wsdl:message>
+  <wsdl:message name="IServiceAUTOSLIT_LeerStock_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LeerStockResponse" />
+  </wsdl:message>
+  <wsdl:portType name="IServiceAUTOSLIT">
+    <wsdl:operation name="LecturaOrdenes">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServiceAUTOSLIT/LecturaOrdenes" message="tns:IServiceAUTOSLIT_LecturaOrdenes_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServiceAUTOSLIT/LecturaOrdenesResponse" message="tns:IServiceAUTOSLIT_LecturaOrdenes_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LecturaLote">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServiceAUTOSLIT/LecturaLote" message="tns:IServiceAUTOSLIT_LecturaLote_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServiceAUTOSLIT/LecturaLoteResponse" message="tns:IServiceAUTOSLIT_LecturaLote_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="NotificarMudadas">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServiceAUTOSLIT/NotificarMudadas" message="tns:IServiceAUTOSLIT_NotificarMudadas_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServiceAUTOSLIT/NotificarMudadasResponse" message="tns:IServiceAUTOSLIT_NotificarMudadas_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LeerOperarios">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServiceAUTOSLIT/LeerOperarios" message="tns:IServiceAUTOSLIT_LeerOperarios_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServiceAUTOSLIT/LeerOperariosResponse" message="tns:IServiceAUTOSLIT_LeerOperarios_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DevolverLote">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServiceAUTOSLIT/DevolverLote" message="tns:IServiceAUTOSLIT_DevolverLote_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServiceAUTOSLIT/DevolverLoteResponse" message="tns:IServiceAUTOSLIT_DevolverLote_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="NotificarTiempos">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServiceAUTOSLIT/NotificarTiempos" message="tns:IServiceAUTOSLIT_NotificarTiempos_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServiceAUTOSLIT/NotificarTiemposResponse" message="tns:IServiceAUTOSLIT_NotificarTiempos_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LeerTiposParo">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServiceAUTOSLIT/LeerTiposParo" message="tns:IServiceAUTOSLIT_LeerTiposParo_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServiceAUTOSLIT/LeerTiposParoResponse" message="tns:IServiceAUTOSLIT_LeerTiposParo_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="EmbalarLotes">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServiceAUTOSLIT/EmbalarLotes" message="tns:IServiceAUTOSLIT_EmbalarLotes_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServiceAUTOSLIT/EmbalarLotesResponse" message="tns:IServiceAUTOSLIT_EmbalarLotes_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LeerPlanning">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServiceAUTOSLIT/LeerPlanning" message="tns:IServiceAUTOSLIT_LeerPlanning_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServiceAUTOSLIT/LeerPlanningResponse" message="tns:IServiceAUTOSLIT_LeerPlanning_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LeerStock">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServiceAUTOSLIT/LeerStock" message="tns:IServiceAUTOSLIT_LeerStock_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServiceAUTOSLIT/LeerStockResponse" message="tns:IServiceAUTOSLIT_LeerStock_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:service name="ServiceAUTOSLIT" />
+</wsdl:definitions>

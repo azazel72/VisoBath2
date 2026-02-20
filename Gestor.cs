@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using VisoBath.MME;
+using VisoBath.Conectores;
 
 namespace VisoBath
 {
@@ -21,6 +22,7 @@ namespace VisoBath
         private DateTime registro_fecha;
 
         private int pesoEstable = 0;
+        private bool actualizandoTipoConector = false;
 
         public Gestor()
         {
@@ -91,13 +93,58 @@ namespace VisoBath
 
         private void MostrarConfiguracion()
         {
-            if (this.configuracion.nombreImpresora != "" && nombreImpresoraTxt.InvokeRequired)
+            Action actualizarImpresora = () =>
             {
-                nombreImpresoraTxt.BeginInvoke((MethodInvoker)delegate ()
+                this.nombreImpresoraTxt.Text = this.configuracion.nombreImpresora;
+                Etiquetas.nombreImpresora = this.configuracion.nombreImpresora;
+            };
+
+            if (this.nombreImpresoraTxt.InvokeRequired)
+            {
+                this.nombreImpresoraTxt.BeginInvoke((MethodInvoker)delegate ()
                 {
-                    this.nombreImpresoraTxt.Text = this.configuracion.nombreImpresora;
-                    Etiquetas.nombreImpresora = this.configuracion.nombreImpresora;
+                    actualizarImpresora();
                 });
+            }
+            else
+            {
+                actualizarImpresora();
+            }
+
+            Action actualizarConector = () =>
+            {
+                if (this.tipoConectorCombo.Items.Count == 0)
+                {
+                    return;
+                }
+
+                string valor = string.IsNullOrWhiteSpace(this.configuracion.conexion) ? "SG" : this.configuracion.conexion;
+                int indice = this.tipoConectorCombo.Items.IndexOf(valor);
+                if (indice < 0)
+                {
+                    indice = 0;
+                    valor = this.tipoConectorCombo.Items[0].ToString();
+                    this.configuracion.conexion = valor;
+                }
+
+                if (this.tipoConectorCombo.SelectedIndex != indice)
+                {
+                    this.actualizandoTipoConector = true;
+                    this.tipoConectorCombo.SelectedIndex = indice;
+                    this.actualizandoTipoConector = false;
+                }
+            };
+
+            if (this.tipoConectorCombo.InvokeRequired)
+            {
+                this.tipoConectorCombo.BeginInvoke((MethodInvoker)delegate ()
+                {
+                    actualizarConector();
+                });
+            }
+            else
+            {
+                actualizarConector();
             }
         }
 
@@ -226,7 +273,7 @@ namespace VisoBath
                 //si no disponemos del albaran, consultar el codigo del albaran en la base de datos
                 bloquearFormulario(true);
                 Estado("Solicitando información del albarán.");
-                _ = ConectorSG.SolicitarAlbaran(this, codigo);
+                _ = ConectorFactory.SolicitarAlbaran(this, codigo, this.configuracion.conexion);
             }
             else
             {
@@ -405,7 +452,7 @@ namespace VisoBath
                 //Etiquetas.ImprimirEtiqueta(this, albaran, palet);
                 if (albaran.estado == 1)
                 {
-                    ConectorSG.EnviarNotificacion(this, albaran);
+                    ConectorFactory.EnviarNotificacion(this, albaran, this.configuracion.conexion);
                 }
             }
         }
@@ -486,7 +533,7 @@ namespace VisoBath
                     Palet palet = albaran.ObtenerPalet(numeroPalet);
                     if (palet != null)
                     {
-                        Etiquetas.ImprimirEtiqueta(this, albaran, palet);
+                        //Etiquetas.ImprimirEtiqueta(this, albaran, palet);
                     }
                 }
                 catch (Exception ex)
@@ -587,6 +634,23 @@ namespace VisoBath
         private void button2_Click(object sender, EventArgs e)
         {
             this.lidar.Activar(null, null, false);
+        }
+
+        private void tipoConectorCombo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (this.actualizandoTipoConector || this.tipoConectorCombo.SelectedItem == null)
+            {
+                return;
+            }
+
+            string seleccionado = this.tipoConectorCombo.SelectedItem.ToString();
+            if (seleccionado == this.configuracion.conexion)
+            {
+                return;
+            }
+
+            this.configuracion.conexion = seleccionado;
+            Estado("Conector ERP establecido en " + seleccionado + ".");
         }
     }
 }

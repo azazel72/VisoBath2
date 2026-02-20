@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/WSAUTOSLIT" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/WSAUTOSLIT" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:complexType name="ArrayOfOrdenes">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Ordenes" nillable="true" type="tns:Ordenes" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfOrdenes" nillable="true" type="tns:ArrayOfOrdenes" />
+  <xs:complexType name="Ordenes">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="GRPROD" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="LENGTH" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="MANDRIL" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="NAMECUST" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="OBSERV" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ORDEN" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ORDERPOS" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="POSITION" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="PRODUCT" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="QNOTIF" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="QREQUEST" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="SEQUENCE" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="SLITER" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="TIPPACKING" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="TIPPOS" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="WIDTH" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Ordenes" nillable="true" type="tns:Ordenes" />
+  <xs:complexType name="ArrayOfLotes">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Lotes" nillable="true" type="tns:Lotes" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfLotes" nillable="true" type="tns:ArrayOfLotes" />
+  <xs:complexType name="Lotes">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="CHARG" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="DENSITY" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="KGREAL" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="LENGTH" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="MANDRIL" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="METREAL" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="NERROR" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="PRODUCT" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="WIDTH" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Lotes" nillable="true" type="tns:Lotes" />
+  <xs:complexType name="ResultMudada">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="LOTESAP" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="MENSAJE_ERROR" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="PEDIDO_ASIGNADO" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="PESO_ASIGNADO" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ResultMudada" nillable="true" type="tns:ResultMudada" />
+  <xs:complexType name="ArrayOfOperarios">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Operarios" nillable="true" type="tns:Operarios" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfOperarios" nillable="true" type="tns:ArrayOfOperarios" />
+  <xs:complexType name="Operarios">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="CODIGO" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="NOMBRE" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Operarios" nillable="true" type="tns:Operarios" />
+  <xs:complexType name="ArrayOfTiposParo">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="TiposParo" nillable="true" type="tns:TiposParo" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfTiposParo" nillable="true" type="tns:ArrayOfTiposParo" />
+  <xs:complexType name="TiposParo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="TPARO" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="TXTPARO" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="TiposParo" nillable="true" type="tns:TiposParo" />
+  <xs:complexType name="ArrayOfPlanning">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Planning" nillable="true" type="tns:Planning" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfPlanning" nillable="true" type="tns:ArrayOfPlanning" />
+  <xs:complexType name="Planning">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ANCHOCONF" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ANCHOSUMI" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ANCHOSUMI_COL" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="BOBPEND" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="CI" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="COLOR_LINE" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="KGORDEN" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="KGSUMI" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="LCORTE1" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="LCORTE2" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="MANDRIL1" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="MANDRIL2" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="MATERIAL" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="MATERIAL_OLD" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="MUDFAC1" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="MUDFAC2" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="MUDNEC1" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="MUDNEC2" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="NANCHOS" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="NMAND" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="N_ORD_EMB" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ORDEN" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ORDEN_COL" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="R_DATE" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="R_DATE_COL" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="SEQUENCE" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="TEXTO_IN" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="TEXTO_OB" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Planning" nillable="true" type="tns:Planning" />
+  <xs:complexType name="ArrayOfStock">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Stock" nillable="true" type="tns:Stock" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfStock" nillable="true" type="tns:ArrayOfStock" />
+  <xs:complexType name="Stock">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ALMACEN" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ANCHO_APRO" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="FECHA_CADU" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="KILOS" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="LOTE" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="MATERIAL" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="METROS" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Stock" nillable="true" type="tns:Stock" />
+</xs:schema>

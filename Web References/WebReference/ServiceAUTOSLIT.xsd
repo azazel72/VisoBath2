@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://10.71.1.104/WSAUTOSLIT/ServiceAUTOSLIT.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/WSAUTOSLIT" />
+  <xs:element name="LecturaOrdenes">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="i_sliter" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="i_grprod" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LecturaOrdenesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/WSAUTOSLIT" minOccurs="0" name="LecturaOrdenesResult" nillable="true" type="q1:ArrayOfOrdenes" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LecturaLote">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="i_lote" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="i_orden" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LecturaLoteResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/WSAUTOSLIT" minOccurs="0" name="LecturaLoteResult" nillable="true" type="q2:ArrayOfLotes" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="NotificarMudadas">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="record" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="record_type" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="operatorx" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="lotesap" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="sliter" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="orden" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="r_position" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="width" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="length" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="kgreal" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="batchconsum" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="consum" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="batchconsum2" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="consum2" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="batchconsum3" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="consum3" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="excepcion" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="r_date" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="r_hour" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="quality" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="union1" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="union2" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="realwidth" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="density" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="slit_pos" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="waste_cause" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="mme_line" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="printer" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="NotificarMudadasResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/WSAUTOSLIT" minOccurs="0" name="NotificarMudadasResult" nillable="true" type="q3:ResultMudada" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LeerOperarios">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LeerOperariosResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/WSAUTOSLIT" minOccurs="0" name="LeerOperariosResult" nillable="true" type="q4:ArrayOfOperarios" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DevolverLote">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="i_lote" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="i_metros" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="i_calidad" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="i_orden" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="i_sliter" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="i_almacen" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="i_impetiquetas" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="i_impoperario" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DevolverLoteResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="DevolverLoteResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="NotificarTiempos">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="sliter" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="orden" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="fecha" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="hora" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="tipoparo" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="tiempo" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="NotificarTiemposResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="NotificarTiemposResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LeerTiposParo">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LeerTiposParoResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/WSAUTOSLIT" minOccurs="0" name="LeerTiposParoResult" nillable="true" type="q5:ArrayOfTiposParo" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="EmbalarLotes">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="lineaembalaje" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="lote" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="EmbalarLotesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="EmbalarLotesResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LeerPlanning">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="i_sliter" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LeerPlanningResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/WSAUTOSLIT" minOccurs="0" name="LeerPlanningResult" nillable="true" type="q6:ArrayOfPlanning" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LeerStock">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="material" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LeerStockResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/WSAUTOSLIT" minOccurs="0" name="LeerStockResult" nillable="true" type="q7:ArrayOfStock" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

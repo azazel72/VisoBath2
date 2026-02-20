@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Text.Json;
@@ -10,9 +10,9 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 
-namespace VisoBath
+namespace VisoBath.Conectores
 {
-    class ConectorSG
+    class ConectorSAP
     {
         /*
         campo "accion" que puede tomar 3 valores
@@ -25,33 +25,33 @@ namespace VisoBath
 
         Si me pasas B es porque quieres que elimine los datos.
         */
-        private const string conexionTiraSG = "https://login.expertxrm.com/wsr/auth/validateuser";
-        private const string jsonTiraSG = "{\"userName\": \"mme\", \"password\": \"mme9874*\", \"domain\": \"JVISO\"}";
-        private const string conexionAlbaranSG = "https://erpws.expertxrm.com/wscomercial/paletizacion/salidaDatos";
-        private const string jsonAlbaranSG = "{{\"tira\": \"{0}\", \"codigo\": \"{1}\"}}";
-        private const string conexionNotificacionSG = "https://erpws.expertxrm.com/wscomercial/paletizacion/entradaDatos";
+        private const string conexionTiraSAP = "https://login.expertxrm.com/wsr/auth/validateuser";
+        private const string jsonTiraSAP = "{\"userName\": \"mme\", \"password\": \"mme9874*\", \"domain\": \"JVISO\"}";
+        private const string conexionAlbaranSAP = "https://erpws.expertxrm.com/wscomercial/paletizacion/salidaDatos";
+        private const string jsonAlbaranSAP = "{{\"tira\": \"{0}\", \"codigo\": \"{1}\"}}";
+        private const string conexionNotificacionSAP = "https://erpws.expertxrm.com/wscomercial/paletizacion/entradaDatos";
 
 
         private static async Task<HttpResponseMessage> Conectar(string cadenaConexion, string cadenaBody, Dictionary<string, string> cabeceras = null)
         {
-            HttpClient conectorSG = new HttpClient();
+            HttpClient conectorSAP = new HttpClient();
             HttpContent contenido = new StringContent(cadenaBody, Encoding.UTF8, "application/json");
-            //conectorSG.DefaultRequestHeaders.Add("x-ddol-security-key", "JVisopd-UZHopxENlUsMahivJIQqUrUaj");
+            //conectorSAP.DefaultRequestHeaders.Add("x-ddol-security-key", "JVisopd-UZHopxENlUsMahivJIQqUrUaj");
             if (cabeceras != null)
             {
                 foreach (KeyValuePair<string, string> par in cabeceras)
                 {
-                    conectorSG.DefaultRequestHeaders.Add(par.Key, par.Value);
+                    conectorSAP.DefaultRequestHeaders.Add(par.Key, par.Value);
                 }
             }
-            HttpResponseMessage r = await conectorSG.PostAsync(cadenaConexion, contenido);
-            conectorSG.Dispose();
+            HttpResponseMessage r = await conectorSAP.PostAsync(cadenaConexion, contenido);
+            conectorSAP.Dispose();
             return r;
         }
 
         public static async Task<String> ObtenerTira()
         {
-            HttpResponseMessage respuesta = await Conectar(conexionTiraSG, jsonTiraSG);
+            HttpResponseMessage respuesta = await Conectar(conexionTiraSAP, jsonTiraSAP);
             if (respuesta.IsSuccessStatusCode)
             {
                 string resultado = await respuesta.Content.ReadAsStringAsync();
@@ -75,11 +75,11 @@ namespace VisoBath
                 if (tira != null)
                 {
                     //obtenemos la informacion del albaran
-                    string jsonBody = string.Format(jsonAlbaranSG, tira, codigo);
+                    string jsonBody = string.Format(jsonAlbaranSAP, tira, codigo);
                     Dictionary<string, string> token = new Dictionary<string, string>() {
                         { "x-ddol-security-token", tira},
                     };
-                    HttpResponseMessage respuesta = await Conectar(conexionAlbaranSG, jsonBody, token);
+                    HttpResponseMessage respuesta = await Conectar(conexionAlbaranSAP, jsonBody, token);
                     if (respuesta.IsSuccessStatusCode)
                     {
                         //string resultado = await respuesta.Content.ReadAsStringAsync();
@@ -106,7 +106,7 @@ namespace VisoBath
                 else
                 {
                     g.Estado("El servidor rechazó la conexión.");
-                    MessageBox.Show("Ocurrió un error durante la conexion al SG.\n", "Error de conexión", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBox.Show("Ocurrió un error durante la conexion al SAP.\n", "Error de conexión", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
             }
             catch (Exception e)
@@ -132,7 +132,7 @@ namespace VisoBath
                         { "x-ddol-security-token", tira}
                     };
                     Console.WriteLine(jsonBody);
-                    HttpResponseMessage respuesta = await Conectar(conexionNotificacionSG, jsonBody, token);
+                    HttpResponseMessage respuesta = await Conectar(conexionNotificacionSAP, jsonBody, token);
                     if (respuesta.IsSuccessStatusCode)
                     {
                         var res = respuesta.Content.ReadAsByteArrayAsync().Result;
@@ -155,7 +155,7 @@ namespace VisoBath
                 else
                 {
                     g.Estado("El servidor rechazó la conexión.");
-                    MessageBox.Show("Ocurrió un error durante la conexion al SG.\n", "Error de conexión", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBox.Show("Ocurrió un error durante la conexion al SAP.\n", "Error de conexión", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
             }
             catch (Exception e)
