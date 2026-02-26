@@ -184,7 +184,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Conectores\ConectorFactory.cs" />
+    <Compile Include="Conectores\ConectorSOAP.cs" />
     <Compile Include="Conectores\IConectorERP.cs" />
+    <Compile Include="Conectores\WSVolumetricas\EnvioNotificacion.cs" />
+    <Compile Include="Conectores\WSVolumetricas\EnvioTira.cs" />
+    <Compile Include="Conectores\WSVolumetricas\RecepcionToken.cs" />
     <Compile Include="ConectorPLC.cs" />
     <Compile Include="Conectores\ConectorSAP.cs" />
     <Compile Include="Conectores\ConectorSG.cs" />
@@ -207,6 +211,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Conectores\WSVolumetricas\Reference.cs" />
     <Compile Include="Servidor.cs" />
     <Compile Include="Gestor.cs">
       <SubType>Form</SubType>
@@ -231,6 +236,8 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="app.config" />
+    <None Include="appsettings.json" />
+    <None Include="configuracion.json" />
     <None Include="packages.config" />
     <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
@@ -308,7 +315,7 @@
   <Import Project="packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.115.5\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets" Condition="Exists('packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.115.5\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
-      <ErrorText>Este proyecto hace referencia a los paquetes NuGet que faltan en este equipo. Use la restauración de paquetes NuGet para descargarlos. Para obtener más información, consulte http://go.microsoft.com/fwlink/?LinkID=322105. El archivo que falta es {0}.</ErrorText>
+      <ErrorText>Este proyecto hace referencia a los paquetes NuGet que faltan en este equipo. Use la restauraciï¿½n de paquetes NuGet para descargarlos. Para obtener mï¿½s informaciï¿½n, consulte http://go.microsoft.com/fwlink/?LinkID=322105. El archivo que falta es {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.115.5\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.115.5\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets'))" />
   </Target>

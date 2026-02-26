@@ -1,14 +1,17 @@
 using System;
-using System.Net.Http;
-using System.Threading.Tasks;
-using System.Text.Json;
 using System.Collections.Generic;
-using System.Threading;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Text;
+using System.Text.Json;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.IO;
+using VisoBath.Conectores.WSVolumetricas;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
 
 namespace VisoBath.Conectores
 {
@@ -25,44 +28,27 @@ namespace VisoBath.Conectores
 
         Si me pasas B es porque quieres que elimine los datos.
         */
-        private const string conexionTiraSAP = "https://login.expertxrm.com/wsr/auth/validateuser";
-        private const string jsonTiraSAP = "{\"userName\": \"mme\", \"password\": \"mme9874*\", \"domain\": \"JVISO\"}";
-        private const string conexionAlbaranSAP = "https://erpws.expertxrm.com/wscomercial/paletizacion/salidaDatos";
+        public static ConectorSOAP _conectorSOAP = new ConectorSOAP();
+        private const string BaseUrl = "http://192.78.70.230:8080/WSVolumetricas.asmx";
+        private const string _credentials = "{\"userName\":\"mme\",\"password\":\"mme9874*\",\"domain\":\"JVISO\"}";
         private const string jsonAlbaranSAP = "{{\"tira\": \"{0}\", \"codigo\": \"{1}\"}}";
-        private const string conexionNotificacionSAP = "https://erpws.expertxrm.com/wscomercial/paletizacion/entradaDatos";
 
-
-        private static async Task<HttpResponseMessage> Conectar(string cadenaConexion, string cadenaBody, Dictionary<string, string> cabeceras = null)
-        {
-            HttpClient conectorSAP = new HttpClient();
-            HttpContent contenido = new StringContent(cadenaBody, Encoding.UTF8, "application/json");
-            //conectorSAP.DefaultRequestHeaders.Add("x-ddol-security-key", "JVisopd-UZHopxENlUsMahivJIQqUrUaj");
-            if (cabeceras != null)
-            {
-                foreach (KeyValuePair<string, string> par in cabeceras)
-                {
-                    conectorSAP.DefaultRequestHeaders.Add(par.Key, par.Value);
-                }
-            }
-            HttpResponseMessage r = await conectorSAP.PostAsync(cadenaConexion, contenido);
-            conectorSAP.Dispose();
-            return r;
-        }
 
         public static async Task<String> ObtenerTira()
         {
-            HttpResponseMessage respuesta = await Conectar(conexionTiraSAP, jsonTiraSAP);
-            if (respuesta.IsSuccessStatusCode)
+            using (var cts = new CancellationTokenSource(TimeSpan.FromSeconds(30)))
             {
-                string resultado = await respuesta.Content.ReadAsStringAsync();
-                Console.WriteLine(resultado);
-                //ResultadoTira r = JsonSerializer.Deserialize<ResultadoTira>(resultado);
-                String r = JsonSerializer.Deserialize<String>(resultado);
-                return r;
-            }
-            else
-            {
-                return null;
+                try
+                {
+                    //entrada esperada {"userName": "mme", "password": "mme9874*", "domain": "JVISO"}
+                    var resultado = await _conectorSOAP.ValidateUserAsync(_credentials, cts.Token).ConfigureAwait(false);
+                    RecepcionToken r = JsonSerializer.Deserialize<RecepcionToken>(resultado);
+                    return r.Token;
+                }
+                catch (OperationCanceledException)
+                {
+                    return null;
+                }
             }
         }
 
@@ -76,16 +62,11 @@ namespace VisoBath.Conectores
                 {
                     //obtenemos la informacion del albaran
                     string jsonBody = string.Format(jsonAlbaranSAP, tira, codigo);
-                    Dictionary<string, string> token = new Dictionary<string, string>() {
-                        { "x-ddol-security-token", tira},
-                    };
-                    HttpResponseMessage respuesta = await Conectar(conexionAlbaranSAP, jsonBody, token);
-                    if (respuesta.IsSuccessStatusCode)
+
+                    using (var cts = new CancellationTokenSource(TimeSpan.FromSeconds(30)))
                     {
-                        //string resultado = await respuesta.Content.ReadAsStringAsync();
-                        var res = respuesta.Content.ReadAsByteArrayAsync().Result;
-                        string resultado = System.Text.Encoding.UTF8.GetString(res);
-                        g.Debug(resultado);
+                        //entrada esperada {"tira": "{0}", "codigo": "{1}"}
+                        var resultado = await _conectorSOAP.SalidaDatosAsync(jsonBody, cts.Token).ConfigureAwait(false);
                         ResultadoAlbaran r = JsonSerializer.Deserialize<ResultadoAlbaran>(resultado);
                         g.Estado("Consulta realizada.");
                         if (r != null && r.result != null && r.result.Count > 0)
@@ -96,11 +77,6 @@ namespace VisoBath.Conectores
                         {
                             MessageBox.Show("No se encontro el albarán.", "No se completó la consulta", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                         }
-                    }
-                    else
-                    {
-                        g.Estado("El servidor rechazó la conexión.");
-                        MessageBox.Show("Ocurrió un error durante la peticion del albarán:\n" + respuesta.ReasonPhrase, "Error de conexión", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     }
                 }
                 else
@@ -126,17 +102,30 @@ namespace VisoBath.Conectores
                 if (tira != null)
                 {
                     Notificacion notificacion = new Notificacion(tira, albaran);
+
+                    notificacion.palets = notificacion.palets
+                        .Select(p => { 
+                            var a = new Palet(p);
+                            var dt = DateTime.ParseExact(a.hora, "dd/MM/yyyy HH:mm:ss", new CultureInfo("es-ES"));
+                            // Si quieres mantener la zona de Madrid:
+                            var dto = new DateTimeOffset(dt, TimeZoneInfo.FindSystemTimeZoneById("Romance Standard Time").GetUtcOffset(dt));
+                            // En ISO 8601 con offset:
+                            var isoConOffset = dto.ToString("o");              // "2025-10-19T16:36:07+02:00"
+                                                                               // En ISO 8601 sin offset (UTC):
+                                                                               //var isoUtc = dto.ToUniversalTime().ToString("o");  // "2025-10-19T14:36:07Z"
+                            a.hora = isoConOffset;
+                            return a;
+                        })
+                        .ToList();
+
                     //obtenemos la informacion del albaran
                     string jsonBody = JsonSerializer.Serialize<Notificacion>(notificacion);
-                    Dictionary<string, string> token = new Dictionary<string, string>() {
-                        { "x-ddol-security-token", tira}
-                    };
-                    Console.WriteLine(jsonBody);
-                    HttpResponseMessage respuesta = await Conectar(conexionNotificacionSAP, jsonBody, token);
-                    if (respuesta.IsSuccessStatusCode)
+
+                    using (var cts = new CancellationTokenSource(TimeSpan.FromSeconds(30)))
                     {
-                        var res = respuesta.Content.ReadAsByteArrayAsync().Result;
-                        string resultado = System.Text.Encoding.UTF8.GetString(res);
+                        string resultado = await _conectorSOAP.EntradaDatosAsync(jsonBody, cts.Token).ConfigureAwait(false);
+                        EnvioNotificacion e = JsonSerializer.Deserialize<EnvioNotificacion>(resultado);
+                        //string resultado = System.Text.Encoding.UTF8.GetString(res);
                         g.Debug(resultado);
                         ResultadoAlbaran r = JsonSerializer.Deserialize<ResultadoAlbaran>(resultado);
                         g.Estado("Notificación realizada.");
@@ -145,11 +134,6 @@ namespace VisoBath.Conectores
                             g.Estado("Error de notificación.");
                             MessageBox.Show("Ocurrió un error durante el envío de la notificación:\nCódigo de error: " + r.errorMsg.code.ToString() + "\nMensaje: " + r.errorMsg.message, "Error de conexión", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
-                    }
-                    else
-                    {
-                        g.Estado("El servidor rechazó la conexión.");
-                        MessageBox.Show("Ocurrió un error durante el envío de la notificación:\n" + respuesta.ReasonPhrase, "Error de conexión", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     }
                 }
                 else
@@ -165,5 +149,6 @@ namespace VisoBath.Conectores
             }
             g.bloquearFormulario(false);
         }
+
     }
 }

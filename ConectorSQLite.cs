@@ -24,20 +24,20 @@ namespace VisoBath
             "razonSocial NVARCHAR(100), direccion NVARCHAR(100), poblacion NVARCHAR(100), provincia NVARCHAR(10), nombreProvincia NVARCHAR(100), pais NVARCHAR(50), telefono NVARCHAR(20), email NVARCHAR(100)," +
             "totalBultos INTEGER DEFAULT 0, bultoActual INTEGER DEFAULT 0,  fechaIniciado NVARCHAR(20) DEFAULT '', fechaFinalizado NVARCHAR(20) DEFAULT '', estado INTEGER DEFAULT 0)";
         private const string crearTablaPalets = "CREATE TABLE IF NOT EXISTS palets (numero INTEGER DEFAULT 1, hora NVARCHAR(20), " +
-            "peso INTEGER, volumen INTEGER, numeroAlbaran NVARCHAR(20), estado INTEGER DEFAULT 0, " +
+            "peso INTEGER, volumen INTEGER, alto INTEGER DEFAULT 0, ancho INTEGER DEFAULT 0, largo INTEGER DEFAULT 0, numeroAlbaran NVARCHAR(20), estado INTEGER DEFAULT 0, " +
             "PRIMARY KEY (numeroAlbaran, numero), FOREIGN KEY (numeroAlbaran) REFERENCES albaranes(numeroAlbaran) ON DELETE CASCADE)";
         private const string crearTablaConfiguracion = "CREATE TABLE IF NOT EXISTS configuracion (indice INTEGER PRIMARY KEY DEFAULT 0, nombreImpresora NVARCHAR(200))";
         private const string crearTablaRegistros = "CREATE TABLE IF NOT EXISTS registros (numeroAlbaran NVARCHAR(20), numero INTEGER, registro NVARCHAR(13500))";
 
         //SELECTS
         static private string selectAlbaranes = "SELECT * FROM albaranes WHERE estado >= 0;";
-        static private string selectPalets = "SELECT * FROM palets WHERE estado >= 0;";
+        //static private string selectPalets = "SELECT * FROM palets WHERE estado >= 0;";
+        static private string selectPalets = "SELECT numero, hora, peso, volumen, alto, ancho, largo, numeroAlbaran FROM palets WHERE estado >= 0;";
         static private string selectConfiguracion = "SELECT * FROM configuracion LIMIT 1;";
 
         //INSERT
         static private string sqlInsertarAlbaranes = "INSERT INTO albaranes ({0}) VALUES ({1});";
         static private string sqlInsertarPalets = "INSERT INTO palets ({0}) VALUES ({1});";
-        static private string sqlInsertarConfiguracion = "INSERT OR REPLACE INTO configuracion ({0}) VALUES ({1});";
         static private string sqlInsertarRegistro = "INSERT OR REPLACE INTO registros (numeroAlbaran, numero, registro) VALUES ('{0}',{1},'{2}');";
 
         //UPDATE
@@ -107,11 +107,6 @@ namespace VisoBath
             return Comando(query);
         }
 
-        static public int InsertarConfiguracion(Configuracion configuracion)
-        {
-            var query = string.Format(sqlInsertarConfiguracion, string.Join(",", configuracion.GetCamposSQL()), string.Join(",", configuracion.GetValoresSQL()));
-            return Comando(query);
-        }
         static public int InsertarRegistro(string albaran, int palet, string trama)
         {
             var query = string.Format(sqlInsertarRegistro, albaran, palet, trama);

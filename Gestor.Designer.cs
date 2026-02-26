@@ -126,9 +126,9 @@
             this.tVersion.AutoSize = true;
             this.tVersion.Location = new System.Drawing.Point(1123, 9);
             this.tVersion.Name = "tVersion";
-            this.tVersion.Size = new System.Drawing.Size(43, 13);
+            this.tVersion.Size = new System.Drawing.Size(50, 13);
             this.tVersion.TabIndex = 11;
-            this.tVersion.Text = "v 2.001";
+            this.tVersion.Text = "B v3.001";
             // 
             // statusStrip1
             // 
@@ -565,12 +565,12 @@
             this.imprimir.Text = "Ê";
             this.imprimir.ToolTipText = "Reimprimir etiqueta";
             this.imprimir.UseColumnTextForButtonValue = true;
-            this.imprimir.Width = 75;
             this.imprimir.Visible = false;
+            this.imprimir.Width = 75;
             // 
             // monthCalendar1
             // 
-            this.monthCalendar1.Location = new System.Drawing.Point(965, 99);
+            this.monthCalendar1.Location = new System.Drawing.Point(985, 178);
             this.monthCalendar1.Name = "monthCalendar1";
             this.monthCalendar1.TabIndex = 19;
             // 
@@ -651,7 +651,7 @@
             // 
             // asociarBtn
             // 
-            this.asociarBtn.Location = new System.Drawing.Point(6, 225);
+            this.asociarBtn.Location = new System.Drawing.Point(6, 234);
             this.asociarBtn.Name = "asociarBtn";
             this.asociarBtn.Size = new System.Drawing.Size(218, 64);
             this.asociarBtn.TabIndex = 23;
@@ -705,6 +705,7 @@
             this.totalBultosTxt.Size = new System.Drawing.Size(69, 31);
             this.totalBultosTxt.TabIndex = 18;
             this.totalBultosTxt.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.totalBultosTxt.ValueChanged += new System.EventHandler(this.totalBultosTxt_ValueChanged);
             // 
             // label11
             // 
@@ -784,19 +785,19 @@
             // 
             // debugTxt
             // 
-            this.debugTxt.Location = new System.Drawing.Point(972, 504);
+            this.debugTxt.Location = new System.Drawing.Point(965, 504);
             this.debugTxt.Multiline = true;
             this.debugTxt.Name = "debugTxt";
             this.debugTxt.ReadOnly = true;
-            this.debugTxt.Size = new System.Drawing.Size(194, 114);
+            this.debugTxt.Size = new System.Drawing.Size(226, 114);
             this.debugTxt.TabIndex = 23;
             this.debugTxt.Visible = false;
             // 
             // eliminarBtn
             // 
-            this.eliminarBtn.Location = new System.Drawing.Point(971, 466);
+            this.eliminarBtn.Location = new System.Drawing.Point(965, 466);
             this.eliminarBtn.Name = "eliminarBtn";
-            this.eliminarBtn.Size = new System.Drawing.Size(213, 32);
+            this.eliminarBtn.Size = new System.Drawing.Size(226, 32);
             this.eliminarBtn.TabIndex = 1000;
             this.eliminarBtn.Text = "Eliminar Albarán";
             this.eliminarBtn.UseVisualStyleBackColor = true;
@@ -804,13 +805,14 @@
             // 
             // grupoConfiguracion
             // 
+            this.grupoConfiguracion.Controls.Add(this.button2);
+            this.grupoConfiguracion.Controls.Add(this.testigoServidor);
             this.grupoConfiguracion.Controls.Add(this.tipoConectorCombo);
             this.grupoConfiguracion.Controls.Add(this.labelTipoConector);
             this.grupoConfiguracion.Controls.Add(this.nombreImpresoraTxt);
-            this.grupoConfiguracion.Controls.Add(this.seleccionarImpresoraBtn);
-            this.grupoConfiguracion.Location = new System.Drawing.Point(965, 274);
+            this.grupoConfiguracion.Location = new System.Drawing.Point(965, 98);
             this.grupoConfiguracion.Name = "grupoConfiguracion";
-            this.grupoConfiguracion.Size = new System.Drawing.Size(226, 150);
+            this.grupoConfiguracion.Size = new System.Drawing.Size(226, 75);
             this.grupoConfiguracion.TabIndex = 25;
             this.grupoConfiguracion.TabStop = false;
             this.grupoConfiguracion.Text = "Configuración";
@@ -847,9 +849,9 @@
             // 
             // seleccionarImpresoraBtn
             // 
-            this.seleccionarImpresoraBtn.Location = new System.Drawing.Point(6, 52);
+            this.seleccionarImpresoraBtn.Location = new System.Drawing.Point(965, 430);
             this.seleccionarImpresoraBtn.Name = "seleccionarImpresoraBtn";
-            this.seleccionarImpresoraBtn.Size = new System.Drawing.Size(214, 32);
+            this.seleccionarImpresoraBtn.Size = new System.Drawing.Size(226, 32);
             this.seleccionarImpresoraBtn.TabIndex = 18;
             this.seleccionarImpresoraBtn.Text = "Seleccionar Impresora";
             this.seleccionarImpresoraBtn.UseVisualStyleBackColor = true;
@@ -859,7 +861,7 @@
             // 
             this.testigoServidor.BackColor = System.Drawing.Color.LimeGreen;
             this.testigoServidor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.testigoServidor.Location = new System.Drawing.Point(971, 375);
+            this.testigoServidor.Location = new System.Drawing.Point(7, 49);
             this.testigoServidor.Name = "testigoServidor";
             this.testigoServidor.Size = new System.Drawing.Size(13, 13);
             this.testigoServidor.TabIndex = 27;
@@ -867,7 +869,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(1001, 371);
+            this.button2.Location = new System.Drawing.Point(37, 45);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(183, 23);
             this.button2.TabIndex = 1001;
@@ -880,9 +882,8 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1203, 729);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.testigoServidor);
             this.Controls.Add(this.grupoConfiguracion);
+            this.Controls.Add(this.seleccionarImpresoraBtn);
             this.Controls.Add(this.eliminarBtn);
             this.Controls.Add(this.debugTxt);
             this.Controls.Add(this.grupoActivos);

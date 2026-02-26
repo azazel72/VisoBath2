@@ -239,6 +239,9 @@ namespace VisoBath
         public string hora { get; set; }
         public int peso { get; set; }
         public int volumen { get; set; }
+        public int alto { get; set; }
+        public int ancho { get; set; }
+        public int largo { get; set; }
         [JsonIgnore]
         public string numeroAlbaran { get; set; }
 
@@ -253,7 +256,22 @@ namespace VisoBath
             this.hora = datos.GetString(1);
             this.peso = datos.GetInt32(2);
             this.volumen = datos.GetInt32(3);
-            this.numeroAlbaran = datos.GetString(4);
+            this.alto = datos.IsDBNull(4) ? 0 : datos.GetInt32(4);
+            this.ancho = datos.IsDBNull(5) ? 0 : datos.GetInt32(5);
+            this.largo = datos.IsDBNull(6) ? 0 : datos.GetInt32(6);
+            this.numeroAlbaran = datos.GetString(7);
+        }
+
+        public Palet(Palet paletOriginal)
+        {
+            this.numero = paletOriginal.numero;
+            this.hora = paletOriginal.hora;
+            this.peso = paletOriginal.peso;
+            this.volumen = paletOriginal.volumen;
+            this.alto = paletOriginal.alto;
+            this.ancho = paletOriginal.ancho;
+            this.largo = paletOriginal.largo;
+            this.numeroAlbaran = paletOriginal.numeroAlbaran;
         }
 
         public string[] GetValoresTabla()
@@ -274,6 +292,9 @@ namespace VisoBath
                 "hora",
                 "peso",
                 "volumen",
+                "alto",
+                "ancho",
+                "largo",
                 "numeroAlbaran",
             };
             return datos;
@@ -286,6 +307,9 @@ namespace VisoBath
                 "'" + this.hora + "'",
                 this.peso.ToString(),
                 this.volumen.ToString(),
+                this.alto.ToString(),
+                this.ancho.ToString(),
+                this.largo.ToString(),
                 "'" + this.numeroAlbaran + "'"
             };
             return datos;

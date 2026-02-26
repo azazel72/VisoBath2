@@ -22,6 +22,9 @@ namespace VisoBath
         private DateTime registro_fecha;
 
         private int pesoEstable = 0;
+        private int altoMedido = 0;
+        private int anchoMedido = 0;
+        private int largoMedido = 0;
         private bool actualizandoTipoConector = false;
 
         public Gestor()
@@ -31,7 +34,7 @@ namespace VisoBath
 
             //inicio de variables
             this.albaranes = new Albaranes();
-            this.configuracion = new Configuracion();
+            this.configuracion = Configuracion.Load();
         }
 
         private void Gestor_Load(object sender, EventArgs e)
@@ -78,8 +81,8 @@ namespace VisoBath
                 Estado("Reintentando conexión a BBDD...");
                 Thread.Sleep(5000);
             }
-            //Carga de datos
-            this.configuracion.Cargar(ConectorSQLite.CargarConfiguracion());
+            //Carga de configuracion
+            this.configuracion = Configuracion.Load();
             Estado("Configuracion cargada.");
             MostrarConfiguracion();
 
@@ -118,13 +121,13 @@ namespace VisoBath
                     return;
                 }
 
-                string valor = string.IsNullOrWhiteSpace(this.configuracion.conexion) ? "SG" : this.configuracion.conexion;
+                string valor = string.IsNullOrWhiteSpace(this.configuracion.selector_conexion) ? "SG" : this.configuracion.selector_conexion;
                 int indice = this.tipoConectorCombo.Items.IndexOf(valor);
                 if (indice < 0)
                 {
                     indice = 0;
                     valor = this.tipoConectorCombo.Items[0].ToString();
-                    this.configuracion.conexion = valor;
+                    this.configuracion.selector_conexion = valor;
                 }
 
                 if (this.tipoConectorCombo.SelectedIndex != indice)
@@ -193,10 +196,10 @@ namespace VisoBath
             else
             {
                 listadoAlbaranes.Rows.Add(a.GetValoresTabla());
-            }
-            if (seleccionar)
-            {
-                this.listadoAlbaranes.CurrentCell = this.listadoAlbaranes[1, this.listadoAlbaranes.Rows.Count - 1];
+                if (seleccionar)
+                {
+                    this.listadoAlbaranes.CurrentCell = this.listadoAlbaranes[1, this.listadoAlbaranes.Rows.Count - 1];
+                }
             }
         }
 
@@ -273,7 +276,7 @@ namespace VisoBath
                 //si no disponemos del albaran, consultar el codigo del albaran en la base de datos
                 bloquearFormulario(true);
                 Estado("Solicitando información del albarán.");
-                _ = ConectorFactory.SolicitarAlbaran(this, codigo, this.configuracion.conexion);
+                _ = ConectorFactory.SolicitarAlbaran(this, codigo, this.configuracion.selector_conexion);
             }
             else
             {
@@ -297,6 +300,19 @@ namespace VisoBath
             this.albaranes.Agregar(albaran);
             //agregamos al listado en pantalla
             this.AgregarAlbaran(albaran, true);
+            //si el albaran ya tiene el total de bultos, ejecutamos la funcion de fijar
+            int r = ConectorSQLite.InsertarAlbaran(albaran);
+            if (r == 1)
+            {
+                //this.MostrarFormulario(albaran);
+                //this.listadoAlbaranes.SelectedRows[0].Cells[2].Value = albaran.totalBultos;
+                //Estado("Albaran insertado en la BBDD.");
+            }
+            else
+            {
+                MessageBox.Show("No se pudo modificar la BBDD. Error nº: " + r.ToString(), "Error en la BBDD", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+
         }
 
         /// <summary>
@@ -351,11 +367,24 @@ namespace VisoBath
 
         public void bloquearFormulario(bool estado)
         {
-            grupoAlbaran.Enabled = !estado;
-            grupoActivos.Enabled = !estado;
-            grupoDatos.Enabled = !estado;
-            grupoPalets.Enabled = !estado;
-            grupoControl.Enabled = !estado;
+            if (grupoAlbaran.InvokeRequired)
+            {
+                grupoAlbaran.BeginInvoke((MethodInvoker)delegate ()
+                {
+                    grupoAlbaran.Enabled = !estado;
+                    grupoActivos.Enabled = !estado;
+                    grupoDatos.Enabled = !estado;
+                    grupoPalets.Enabled = !estado;
+                    grupoControl.Enabled = !estado;
+                });
+            } else
+            {
+                grupoAlbaran.Enabled = !estado;
+                grupoActivos.Enabled = !estado;
+                grupoDatos.Enabled = !estado;
+                grupoPalets.Enabled = !estado;
+                grupoControl.Enabled = !estado;
+            }
         }
 
         private void listadoAlbaranes_SelectionChanged(object sender, EventArgs e)
@@ -391,7 +420,7 @@ namespace VisoBath
                 }
             }
         }
-
+        
         private string ConvertirFecha(string fecha)
         {
             try
@@ -423,6 +452,9 @@ namespace VisoBath
                 palet.numero = Int32.Parse(this.numeroBultoTxt.Text);
                 palet.peso = Int32.Parse(this.pesoTxt.Text);
                 palet.volumen = Int32.Parse(this.volumenTxt.Text);
+                palet.alto = this.altoMedido;
+                palet.ancho = this.anchoMedido;
+                palet.largo = this.largoMedido;
                 palet.numeroAlbaran = albaran.numeroAlbaran;
                 albaran.AgregarPalet(palet);
                 //actualizar bbdd
@@ -448,11 +480,14 @@ namespace VisoBath
 
                 //ponemos a cero el peso y el volumen
                 mostrarDatos(0, 0);
+                this.altoMedido = 0;
+                this.anchoMedido = 0;
+                this.largoMedido = 0;
 
                 //Etiquetas.ImprimirEtiqueta(this, albaran, palet);
                 if (albaran.estado == 1)
                 {
-                    ConectorFactory.EnviarNotificacion(this, albaran, this.configuracion.conexion);
+                    ConectorFactory.EnviarNotificacion(this, albaran, this.configuracion.selector_conexion);
                 }
             }
         }
@@ -550,15 +585,8 @@ namespace VisoBath
             if (impresora != "")
             {
                 this.configuracion.nombreImpresora = impresora;
-                int r = ConectorSQLite.InsertarConfiguracion(this.configuracion);
-                if (r == 1)
-                {
-                    this.MostrarConfiguracion();
-                }
-                else
-                {
-                    MessageBox.Show("No se pudo insertar la configuracion en la BBDD. Error nº: " + r.ToString(), "Error en la BBDD", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
+                this.configuracion.Save();
+                this.MostrarConfiguracion();
             }
         }
 
@@ -623,6 +651,9 @@ namespace VisoBath
                             this.mostrarVolumen(vol);
                             int lado1 = (int)(datos[3] - datos[2]);
                             int lado2 = (int)(datos[5] - datos[4]);
+                            this.altoMedido = (int)Math.Round(datos[0]);
+                            this.largoMedido = Math.Abs(lado1);
+                            this.anchoMedido = Math.Abs(lado2);
                             string resumen = "Peso: " + this.pesoEstable + ", Volumen: " + vol.ToString() + ", Lado 1: " + lado1.ToString() + ", Lado 2: " + lado2.ToString() + ", Altura: " + datos[0].ToString();
                             Console.WriteLine(resumen);                        
                         }
@@ -644,13 +675,19 @@ namespace VisoBath
             }
 
             string seleccionado = this.tipoConectorCombo.SelectedItem.ToString();
-            if (seleccionado == this.configuracion.conexion)
+            if (seleccionado == this.configuracion.selector_conexion)
             {
                 return;
             }
 
-            this.configuracion.conexion = seleccionado;
+            this.configuracion.selector_conexion = seleccionado;
+            this.configuracion.Save();
             Estado("Conector ERP establecido en " + seleccionado + ".");
+        }
+
+        private void totalBultosTxt_ValueChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -1,66 +1,116 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Data.SQLite;
+using System.IO;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace VisoBath
 {
     public class Configuracion
     {
-        public int indice { get; set; }
         public string nombreImpresora { get; set; }
-        public string conexion { get; set; }
+        public string url_conexion { get; set; }
+        public string selector_conexion { get; set; }
+
+        private const string ConfigFileName = "configuracion.json";
+        private const string DefaultUrl = "http://192.78.70.230:8080/WSVolumetricas.asmx";
+        private const string DefaultSelector = "SG";
 
         public Configuracion()
         {
-            this.indice = 0;
             this.nombreImpresora = "";
-            this.conexion = "SG";
+            this.url_conexion = DefaultUrl;
+            this.selector_conexion = DefaultSelector;
         }
 
-        public void Cargar(SQLiteDataReader datos)
+        public static Configuracion Load()
         {
-            if (datos != null)
+            try
             {
-                while (datos.Read())
+                string path = GetConfigPath();
+                if (!File.Exists(path))
                 {
-                    this.indice = datos.GetInt32(0);
-                    this.nombreImpresora = datos.GetString(1);
-                    if (datos.FieldCount > 2 && !datos.IsDBNull(2))
-                    {
-                        this.conexion = datos.GetString(2);
-                    }
+                    return new Configuracion();
                 }
-                datos.Close();
+
+                string json = File.ReadAllText(path);
+                if (string.IsNullOrWhiteSpace(json))
+                {
+                    return new Configuracion();
+                }
+
+                PersistedConfig data = JsonSerializer.Deserialize<PersistedConfig>(json);
+                if (data == null)
+                {
+                    return new Configuracion();
+                }
+
+                var configuracion = new Configuracion
+                {
+                    nombreImpresora = data.NombreImpresora ?? string.Empty,
+                    url_conexion = string.IsNullOrWhiteSpace(data.UrlConexion) ? DefaultUrl : data.UrlConexion,
+                    selector_conexion = ValidateSelector(data.SelectorConexion)
+                };
+
+                return configuracion;
+            }
+            catch
+            {
+                return new Configuracion();
             }
         }
 
-        public string[] GetValoresTabla()
+        public void Save()
         {
-            string[] datos = {
-                this.nombreImpresora
-            };
-            return datos;
+            try
+            {
+                var data = new PersistedConfig
+                {
+                    NombreImpresora = this.nombreImpresora ?? string.Empty,
+                    UrlConexion = string.IsNullOrWhiteSpace(this.url_conexion) ? DefaultUrl : this.url_conexion,
+                    SelectorConexion = ValidateSelector(this.selector_conexion)
+                };
+
+                string json = JsonSerializer.Serialize(data, new JsonSerializerOptions
+                {
+                    WriteIndented = true
+                });
+                File.WriteAllText(GetConfigPath(), json);
+            }
+            catch
+            {
+                // Ignorado: no debemos bloquear la aplicación si no se puede guardar
+            }
         }
 
-        public string[] GetCamposSQL()
+
+        private static string GetConfigPath()
         {
-            string[] datos = {
-                "indice",
-                "nombreImpresora"
-            };
-            return datos;
+            return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigFileName);
         }
 
-        public string[] GetValoresSQL()
+        private static string ValidateSelector(string value)
         {
-            string[] datos = {
-                this.indice.ToString(),
-                "'" + this.nombreImpresora + "'"
-            };
-            return datos;
+            string conexionNormalizada = string.IsNullOrWhiteSpace(value)
+                ? DefaultSelector
+                : value.Trim().ToUpperInvariant();
+
+            if (conexionNormalizada != "SG" && conexionNormalizada != "SAP")
+            {
+                conexionNormalizada = DefaultSelector;
+            }
+
+            return conexionNormalizada;
         }
 
+        private class PersistedConfig
+        {
+            [JsonPropertyName("nombreImpresora")]
+            public string NombreImpresora { get; set; }
+            [JsonPropertyName("url_conexion")]
+            public string UrlConexion { get; set; }
+            [JsonPropertyName("selector_conexion")]
+            public string SelectorConexion { get; set; }
+        }
     }
 
 }
