@@ -301,18 +301,10 @@ namespace VisoBath
             //agregamos al listado en pantalla
             this.AgregarAlbaran(albaran, true);
             //si el albaran ya tiene el total de bultos, ejecutamos la funcion de fijar
-            int r = ConectorSQLite.InsertarAlbaran(albaran);
-            if (r == 1)
+            if (albaran.totalBultos > 0)
             {
-                //this.MostrarFormulario(albaran);
-                //this.listadoAlbaranes.SelectedRows[0].Cells[2].Value = albaran.totalBultos;
-                //Estado("Albaran insertado en la BBDD.");
+                this.totalBultosTxt.Value = albaran.totalBultos;
             }
-            else
-            {
-                MessageBox.Show("No se pudo modificar la BBDD. Error nº: " + r.ToString(), "Error en la BBDD", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-
         }
 
         /// <summary>
