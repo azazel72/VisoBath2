@@ -205,25 +205,31 @@ namespace VisoBath
 
         public string[] GetValoresSQL()
         {
-            string[] datos = {
-                "'" + this.numeroAlbaran + "'",
+            string[] datos =
+            {
+                Sql(this.numeroAlbaran),
                 this.numeroPedido.ToString(),
-                "'" + this.fechaAlbaran + "'",
-                "'" + this.nombreEmpresa + "'",
-                "'" + this.dirEmpresa + "'",
+                Sql(this.fechaAlbaran),
+                Sql(this.nombreEmpresa),
+                Sql(this.dirEmpresa),
                 this.cpEmpresa.ToString(),
-                "'" + this.razonSocial + "'",
-                "'" + this.direccion + "'",
-                "'" + this.poblacion + "'",
-                "'" + this.provincia + "'",
-                "'" + this.nombreProvincia + "'",
-                "'" + this.pais + "'",
-                "'" + this.telefono + "'",
-                "'" + this.email + "'",
-                "'" + this.totalBultos + "'",
-                "'" + this.fechaIniciado + "'"
+                Sql(this.razonSocial),
+                Sql(this.direccion),
+                Sql(this.poblacion),
+                Sql(this.provincia),
+                Sql(this.nombreProvincia),
+                Sql(this.pais),
+                Sql(this.telefono),
+                Sql(this.email),
+                this.totalBultos.ToString(),
+                Sql(this.fechaIniciado)
             };
             return datos;
+        }
+
+        private static string Sql(string valor)
+        {
+            return "'" + (valor ?? "").Replace("'", "''") + "'";
         }
 
         public IEnumerator GetEnumerator()

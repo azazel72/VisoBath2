@@ -155,3 +155,4 @@ C:\Proyectos\VisoBath2\obj\Debug\VisoBath.application
 C:\Proyectos\VisoBath2\obj\Debug\VisoBath.csproj.Up2Date
 C:\Proyectos\VisoBath2\obj\Debug\VisoBath.exe
 C:\Proyectos\VisoBath2\obj\Debug\VisoBath.pdb
+C:\Proyectos\VisoBath2\obj\Debug\VisoBath.exe.config

@@ -100,12 +100,12 @@
             this.debugTxt = new System.Windows.Forms.TextBox();
             this.eliminarBtn = new System.Windows.Forms.Button();
             this.grupoConfiguracion = new System.Windows.Forms.GroupBox();
+            this.button2 = new System.Windows.Forms.Button();
+            this.testigoServidor = new System.Windows.Forms.Label();
             this.tipoConectorCombo = new System.Windows.Forms.ComboBox();
             this.labelTipoConector = new System.Windows.Forms.Label();
             this.nombreImpresoraTxt = new System.Windows.Forms.Label();
             this.seleccionarImpresoraBtn = new System.Windows.Forms.Button();
-            this.testigoServidor = new System.Windows.Forms.Label();
-            this.button2 = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.logo_mme)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -128,7 +128,7 @@
             this.tVersion.Name = "tVersion";
             this.tVersion.Size = new System.Drawing.Size(50, 13);
             this.tVersion.TabIndex = 11;
-            this.tVersion.Text = "B v3.001";
+            this.tVersion.Text = "B v3.002";
             // 
             // statusStrip1
             // 
@@ -817,6 +817,26 @@
             this.grupoConfiguracion.TabStop = false;
             this.grupoConfiguracion.Text = "Configuración";
             // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(37, 45);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(183, 23);
+            this.button2.TabIndex = 1001;
+            this.button2.Text = "Reiniciar Sensor";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // testigoServidor
+            // 
+            this.testigoServidor.BackColor = System.Drawing.Color.LimeGreen;
+            this.testigoServidor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.testigoServidor.Location = new System.Drawing.Point(7, 49);
+            this.testigoServidor.Name = "testigoServidor";
+            this.testigoServidor.Size = new System.Drawing.Size(13, 13);
+            this.testigoServidor.TabIndex = 27;
+            this.testigoServidor.Visible = false;
+            // 
             // tipoConectorCombo
             // 
             this.tipoConectorCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -856,26 +876,6 @@
             this.seleccionarImpresoraBtn.Text = "Seleccionar Impresora";
             this.seleccionarImpresoraBtn.UseVisualStyleBackColor = true;
             this.seleccionarImpresoraBtn.Click += new System.EventHandler(this.seleccionarImpresoraBtn_Click);
-            // 
-            // testigoServidor
-            // 
-            this.testigoServidor.BackColor = System.Drawing.Color.LimeGreen;
-            this.testigoServidor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.testigoServidor.Location = new System.Drawing.Point(7, 49);
-            this.testigoServidor.Name = "testigoServidor";
-            this.testigoServidor.Size = new System.Drawing.Size(13, 13);
-            this.testigoServidor.TabIndex = 27;
-            this.testigoServidor.Visible = false;
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(37, 45);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(183, 23);
-            this.button2.TabIndex = 1001;
-            this.button2.Text = "Reiniciar Sensor";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // Gestor
             // 
