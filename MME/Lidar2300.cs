@@ -93,7 +93,7 @@ namespace VisoBath.MME
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
+                ErrorLogger.Add("Error (Escuchar Lidar2300): " + ex.Message, ex);
             }
         }
 
@@ -203,7 +203,7 @@ namespace VisoBath.MME
             }
             catch (Exception e)
             {
-                //this.gestor.EscribirError("ERROR (ApagarHilo): " + e.Message);
+                ErrorLogger.Add("ERROR (ApagarHilo Lidar2300): " + e.Message, e);
             }
         }
 

@@ -70,6 +70,7 @@ namespace VisoBath
             }
             catch (Exception e)
             {
+                ErrorLogger.Add("Error (Imprimir etiqueta): " + e.Message, e);
                 return false;
             }
         }

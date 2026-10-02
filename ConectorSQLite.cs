@@ -73,6 +73,7 @@ namespace VisoBath
             catch (MySqlException ex)
             {
                 string error = "Error (conexion bbdd): " + ex.Number.ToString() + " - " + ex.Message;
+                ErrorLogger.Add(error, ex);
                 gestor.Estado(error);
                 MessageBox.Show(error, "Error en la BBDD", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return false;
@@ -147,7 +148,7 @@ namespace VisoBath
             }
             catch (SQLiteException e)
             {
-                Console.WriteLine(e.Message);
+                ErrorLogger.Add("Error (EliminarAlbaran): " + e.Message, e);
                 return -e.ErrorCode;
             }
         }
@@ -161,7 +162,7 @@ namespace VisoBath
             }
             catch (SQLiteException e)
             {
-                Console.WriteLine(e.Message);
+                ErrorLogger.Add("Error (Comando SQL): " + e.Message + " | " + query, e);
                 return -e.ErrorCode;
             }
         }
@@ -175,7 +176,7 @@ namespace VisoBath
             }
             catch (SQLiteException e)
             {
-                Console.WriteLine(e.Message);
+                ErrorLogger.Add("Error (Consulta SQL): " + e.Message + " | " + query, e);
                 return null;
             }
         }

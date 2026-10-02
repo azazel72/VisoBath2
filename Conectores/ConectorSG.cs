@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Text.Json;
@@ -31,7 +31,6 @@ namespace VisoBath.Conectores
         private const string jsonAlbaranSG = "{{\"tira\": \"{0}\", \"codigo\": \"{1}\"}}";
         private const string conexionNotificacionSG = "https://erpws.expertxrm.com/wscomercial/paletizacion/entradaDatos";
 
-
         private static async Task<HttpResponseMessage> Conectar(string cadenaConexion, string cadenaBody, Dictionary<string, string> cabeceras = null)
         {
             HttpClient conectorSG = new HttpClient();
@@ -51,17 +50,21 @@ namespace VisoBath.Conectores
 
         public static async Task<String> ObtenerTira()
         {
-            HttpResponseMessage respuesta = await Conectar(conexionTiraSG, jsonTiraSG);
-            if (respuesta.IsSuccessStatusCode)
+            try
             {
-                string resultado = await respuesta.Content.ReadAsStringAsync();
-                Console.WriteLine(resultado);
-                //ResultadoTira r = JsonSerializer.Deserialize<ResultadoTira>(resultado);
-                String r = JsonSerializer.Deserialize<String>(resultado);
-                return r;
+                HttpResponseMessage respuesta = await Conectar(conexionTiraSG, jsonTiraSG);
+                if (respuesta.IsSuccessStatusCode)
+                {
+                    string resultado = await respuesta.Content.ReadAsStringAsync();
+                    Console.WriteLine(resultado);
+                    String r = JsonSerializer.Deserialize<String>(resultado);
+                    return r;
+                }
+                return null;
             }
-            else
+            catch (Exception ex)
             {
+                ErrorLogger.Add("Error (ObtenerTira SG): " + ex.Message, ex);
                 return null;
             }
         }
@@ -70,11 +73,9 @@ namespace VisoBath.Conectores
         {
             try
             {
-                //obtenemos la tira
                 String tira = await ObtenerTira();
                 if (tira != null)
                 {
-                    //obtenemos la informacion del albaran
                     string jsonBody = string.Format(jsonAlbaranSG, tira, codigo);
                     Dictionary<string, string> token = new Dictionary<string, string>() {
                         { "x-ddol-security-token", tira},
@@ -82,7 +83,6 @@ namespace VisoBath.Conectores
                     HttpResponseMessage respuesta = await Conectar(conexionAlbaranSG, jsonBody, token);
                     if (respuesta.IsSuccessStatusCode)
                     {
-                        //string resultado = await respuesta.Content.ReadAsStringAsync();
                         var res = respuesta.Content.ReadAsByteArrayAsync().Result;
                         string resultado = System.Text.Encoding.UTF8.GetString(res);
                         g.Debug(resultado);
@@ -112,6 +112,7 @@ namespace VisoBath.Conectores
             catch (Exception e)
             {
                 g.Estado("Error durante la consulta o el formato de la respuesta.");
+                ErrorLogger.Add("Error (SolicitarAlbaran SG): " + e.Message, e);
                 MessageBox.Show("Ocurrió un error durante la consulta del albarán:\n" + e.Message, "Error de conexión", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             g.bloquearFormulario(false);
@@ -121,12 +122,10 @@ namespace VisoBath.Conectores
         {
             try
             {
-                //obtenemos la tira
                 String tira = await ObtenerTira();
                 if (tira != null)
                 {
                     Notificacion notificacion = new Notificacion(tira, albaran);
-                    //obtenemos la informacion del albaran
                     string jsonBody = JsonSerializer.Serialize<Notificacion>(notificacion);
                     Dictionary<string, string> token = new Dictionary<string, string>() {
                         { "x-ddol-security-token", tira}
@@ -161,6 +160,7 @@ namespace VisoBath.Conectores
             catch (Exception e)
             {
                 g.Estado("Error durante la consulta o el formato de la respuesta.");
+                ErrorLogger.Add("Error (EnviarNotificacion SG): " + e.Message, e);
                 MessageBox.Show("Ocurrió un error durante el envío de la notificación:\n" + e.Message, "Error de conexión", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             g.bloquearFormulario(false);

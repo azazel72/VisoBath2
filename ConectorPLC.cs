@@ -42,8 +42,7 @@ namespace VisoBath
                 }
                 catch (Exception e)
                 {
-                    //ConectorSQL.InsertarError("Error (Enviar a plc): " + mensaje + " - " + e.StackTrace);
-                    //Console.WriteLine("Error: " + e.StackTrace);
+                    ErrorLogger.Add("Error (Enviar a plc): " + e.Message + " | " + mensaje);
                 }
             }
         }

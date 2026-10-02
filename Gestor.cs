@@ -26,11 +26,13 @@ namespace VisoBath
         private int anchoMedido = 0;
         private int largoMedido = 0;
         private bool actualizandoTipoConector = false;
+        private bool inicializandoLog = false;
 
         public Gestor()
         {
             InitializeComponent();
             ConectorSQLite.gestor = this;
+            ErrorLogger.EntryAdded += ErrorLogger_EntryAdded;
 
             //inicio de variables
             this.albaranes = new Albaranes();
@@ -40,6 +42,7 @@ namespace VisoBath
         private void Gestor_Load(object sender, EventArgs e)
         {
             Show();
+            InicializarLog();
             Task carga = new Task(CargarDatos);
             carga.Start();
             this.servidor = new Servidor(this);
@@ -49,6 +52,63 @@ namespace VisoBath
             //this.lidar = new Lidar2000("192.168.0.9");
             this.lidar.Activar();
             this.estado = Status.PARADO;
+        }
+
+        private void InicializarLog()
+        {
+            if (this.logListBox.InvokeRequired)
+            {
+                this.logListBox.BeginInvoke((MethodInvoker)InicializarLog);
+                return;
+            }
+
+            this.inicializandoLog = true;
+            this.logListBox.Items.Clear();
+            foreach (string entry in ErrorLogger.Entries)
+            {
+                this.logListBox.Items.Add(entry);
+            }
+            this.inicializandoLog = false;
+        }
+
+        private void ErrorLogger_EntryAdded(string entry)
+        {
+            if (this.IsDisposed)
+            {
+                return;
+            }
+
+            if (this.logListBox.InvokeRequired)
+            {
+                this.logListBox.BeginInvoke((MethodInvoker)delegate
+                {
+                    AgregarEntradaLog(entry);
+                });
+            }
+            else
+            {
+                AgregarEntradaLog(entry);
+            }
+        }
+
+        private void AgregarEntradaLog(string entry)
+        {
+            if (this.logListBox == null || this.logListBox.IsDisposed)
+            {
+                return;
+            }
+
+            if (this.inicializandoLog)
+            {
+                return;
+            }
+
+            this.logListBox.Items.Add(entry);
+            while (this.logListBox.Items.Count > 1000)
+            {
+                this.logListBox.Items.RemoveAt(0);
+            }
+            this.logListBox.TopIndex = this.logListBox.Items.Count - 1;
         }
 
         private void Gestor_FormClosing(object sender, FormClosingEventArgs e)
@@ -243,6 +303,16 @@ namespace VisoBath
             textoEstado.Text = texto;
         }
 
+        public void Log(string texto)
+        {
+            ErrorLogger.Add(texto);
+        }
+
+        public void Log(string texto, Exception ex)
+        {
+            ErrorLogger.Add(texto, ex);
+        }
+
         public void Debug(string texto)
         {
             if (this.debugTxt.InvokeRequired)
@@ -304,6 +374,8 @@ namespace VisoBath
             if (albaran.totalBultos > 0)
             {
                 this.totalBultosTxt.Value = albaran.totalBultos;
+                // Simular el click del botón Fijar (ejecutar la lógica existente)
+                this.FijarBultosBtn_Click(this.FijarBultosBtn, EventArgs.Empty);
             }
         }
 
@@ -542,9 +614,10 @@ namespace VisoBath
         private void eliminarBtn_Click(object sender, EventArgs e)
         {
             Albaran albaran = (Albaran) this.listadoAlbaranes.Tag;
-            if (albaran != null)
+            if (albaran != null && ConectorSQLite.EliminarAlbaran(albaran) > 0)
             {
-                ConectorSQLite.EliminarAlbaran(albaran);
+                this.albaranes.Eliminar(albaran);
+                MostrarAlbaranes();
             }
         }
 

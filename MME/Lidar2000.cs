@@ -141,7 +141,7 @@ namespace VisoBath.MME
             }
             catch (HttpRequestException ex)
             {
-                Console.WriteLine("Excepcion (Conectar): " + ex.Message);
+                ErrorLogger.Add("Excepcion (Conectar): " + ex.Message, ex);
             }
         }
         private void EscucharSensor()
@@ -185,7 +185,7 @@ namespace VisoBath.MME
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Excepcion (Escuchar): {0} ", ex.Message);
+                ErrorLogger.Add("Excepcion (Escuchar): " + ex.Message, ex);
             }
             finally
             {
@@ -214,7 +214,7 @@ namespace VisoBath.MME
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Excepcion (Alimentar): {0} ", ex.Message);
+                ErrorLogger.Add("Excepcion (Alimentar): " + ex.Message, ex);
             }
             finally
             {
@@ -245,7 +245,7 @@ namespace VisoBath.MME
             }
             catch (HttpRequestException ex)
             {
-                Console.WriteLine("Excepcion (Iniciar): " + ex.Message);
+                ErrorLogger.Add("Excepcion (Iniciar): " + ex.Message, ex);
             }
         }
         public async Task Parar(Action<object> funcionOK = null, Action<object> funcionKO = null)
@@ -259,7 +259,7 @@ namespace VisoBath.MME
             }
             catch (HttpRequestException ex)
             {
-                Console.WriteLine("Excepcion (Parar): " + ex.Message);
+                ErrorLogger.Add("Excepcion (Parar): " + ex.Message, ex);
             }
 
         }
@@ -275,7 +275,7 @@ namespace VisoBath.MME
             }
             catch (HttpRequestException ex)
             {
-                Console.WriteLine("Excepcion (Registrar): " + ex.Message);
+                ErrorLogger.Add("Excepcion (Registrar): " + ex.Message, ex);
             }
         }
 
@@ -306,7 +306,7 @@ namespace VisoBath.MME
             }
             catch (Exception e)
             {
-                //this.gestor.EscribirError("ERROR (ApagarHilo): " + e.Message);
+                ErrorLogger.Add("ERROR (ApagarHilo Lidar2000): " + e.Message, e);
             }
         }
 

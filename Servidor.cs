@@ -35,14 +35,11 @@ namespace VisoBath
             try
             {
                 this.hiloVolumetrico = new Thread(new ThreadStart(IniciarServidorVolumetrico));
-                this.hiloVolumetrico = new Thread(new ThreadStart(IniciarServidorVolumetrico));
-
-                this.hiloVolumetrico.Start();
                 this.hiloVolumetrico.Start();
             }
             catch (Exception e)
             {
-                //this.gestor.EscribirError("Error (Iniciar): " + e.StackTrace);
+                this.gestor.Log("Error (Iniciar servidor): " + e.Message);
                 return false;
             }
             return true;
@@ -66,7 +63,7 @@ namespace VisoBath
             }
             catch (Exception e)
             {
-                //this.gestor.EscribirError("ERROR (ApagarHilo): " + e.Message);
+                this.gestor.Log("Error (Apagar servidor): " + e.Message);
             }
         }
 
@@ -111,7 +108,7 @@ namespace VisoBath
                 }
                 catch (Exception e)
                 {
-                    this.gestor.Debug("Error (Crear Servidor Automatas, Bucle externo)" + e.StackTrace);
+                    this.gestor.Log("Error (Crear Servidor Automatas, Bucle externo): " + e.Message);
                 }
 
                 try
@@ -124,7 +121,7 @@ namespace VisoBath
                 }
                 catch (Exception e)
                 {
-                    this.gestor.Debug("Error (Cerrando puerto del servidor de Automatas): " + e.StackTrace);
+                    this.gestor.Log("Error (Cerrando puerto del servidor de Automatas): " + e.Message);
                 }
             }
         }
@@ -165,7 +162,7 @@ namespace VisoBath
             }
             catch (Exception e)
             {
-                this.gestor.Debug("Error (procesarAutomata): " + e.StackTrace);
+                this.gestor.Log("Error (procesarAutomata): " + e.Message);
             }
         }
     }

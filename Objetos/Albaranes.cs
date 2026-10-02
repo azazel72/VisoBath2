@@ -29,6 +29,11 @@ namespace VisoBath
             }
         }
 
+        public void Eliminar(Albaran a)
+        {
+            this.albaranes.Remove(a.numeroAlbaran);
+        }
+
         public void Agregar(SQLiteDataReader datos)
         {
             if (datos != null)
@@ -142,6 +147,10 @@ namespace VisoBath
 
         public void AgregarPalet(Palet palet)
         {
+            if (this.palets.ContainsKey(palet.numero))
+            {
+                throw new ArgumentException($"Ya existe un palet con el número {palet.numero} en este albarán.");
+            }
             this.palets.Add(palet.numero, palet);
             //comprobamos si esta completo
             if (estado == 0)

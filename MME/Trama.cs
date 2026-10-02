@@ -133,6 +133,7 @@ namespace VisoBath.MME
             }
             catch (System.ArgumentOutOfRangeException)
             {
+                ErrorLogger.Add("Error (fecha Trama): argumento fuera de rango");
                 return new DateTime(0);
             }
         }

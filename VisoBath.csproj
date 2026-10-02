@@ -184,15 +184,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Conectores\ConectorFactory.cs" />
+    <Compile Include="Conectores\ConectorSAP.cs" />
     <Compile Include="Conectores\ConectorSOAP.cs" />
     <Compile Include="Conectores\IConectorERP.cs" />
     <Compile Include="Conectores\WSVolumetricas\EnvioNotificacion.cs" />
     <Compile Include="Conectores\WSVolumetricas\EnvioTira.cs" />
     <Compile Include="Conectores\WSVolumetricas\RecepcionToken.cs" />
     <Compile Include="ConectorPLC.cs" />
-    <Compile Include="Conectores\ConectorSAP.cs" />
     <Compile Include="Conectores\ConectorSG.cs" />
     <Compile Include="ConectorSQLite.cs" />
+    <Compile Include="ErrorLogger.cs" />
     <Compile Include="Impresion\Etiquetas.cs" />
     <Compile Include="Impresion\RawPrinterHelper.cs" />
     <Compile Include="MME\Lidar2000.cs" />

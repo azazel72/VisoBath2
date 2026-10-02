@@ -98,6 +98,7 @@
             this.total = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.completado = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.debugTxt = new System.Windows.Forms.TextBox();
+            this.logListBox = new System.Windows.Forms.ListBox();
             this.eliminarBtn = new System.Windows.Forms.Button();
             this.grupoConfiguracion = new System.Windows.Forms.GroupBox();
             this.button2 = new System.Windows.Forms.Button();
@@ -128,7 +129,7 @@
             this.tVersion.Name = "tVersion";
             this.tVersion.Size = new System.Drawing.Size(50, 13);
             this.tVersion.TabIndex = 11;
-            this.tVersion.Text = "B v3.002";
+            this.tVersion.Text = "B v3.003";
             // 
             // statusStrip1
             // 
@@ -785,13 +786,22 @@
             // 
             // debugTxt
             // 
-            this.debugTxt.Location = new System.Drawing.Point(965, 504);
+            this.debugTxt.Location = new System.Drawing.Point(965, 620);
             this.debugTxt.Multiline = true;
             this.debugTxt.Name = "debugTxt";
             this.debugTxt.ReadOnly = true;
-            this.debugTxt.Size = new System.Drawing.Size(226, 114);
-            this.debugTxt.TabIndex = 23;
+            this.debugTxt.Size = new System.Drawing.Size(226, 20);
+            this.debugTxt.TabIndex = 24;
             this.debugTxt.Visible = false;
+            // 
+            // logListBox
+            // 
+            this.logListBox.FormattingEnabled = true;
+            this.logListBox.HorizontalScrollbar = true;
+            this.logListBox.Location = new System.Drawing.Point(965, 504);
+            this.logListBox.Name = "logListBox";
+            this.logListBox.Size = new System.Drawing.Size(226, 108);
+            this.logListBox.TabIndex = 23;
             // 
             // eliminarBtn
             // 
@@ -885,7 +895,7 @@
             this.Controls.Add(this.grupoConfiguracion);
             this.Controls.Add(this.seleccionarImpresoraBtn);
             this.Controls.Add(this.eliminarBtn);
-            this.Controls.Add(this.debugTxt);
+            this.Controls.Add(this.logListBox);
             this.Controls.Add(this.grupoActivos);
             this.Controls.Add(this.grupoControl);
             this.Controls.Add(this.grupoAlbaran);
@@ -961,6 +971,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn bultos;
         private System.Windows.Forms.DataGridViewTextBoxColumn total;
         private System.Windows.Forms.DataGridViewTextBoxColumn completado;
+        private System.Windows.Forms.TextBox debugTxt;
         private System.Windows.Forms.NumericUpDown totalBultosTxt;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Button FijarBultosBtn;
@@ -972,7 +983,7 @@
         private System.Windows.Forms.TextBox fechaAlbaranTxt;
         private System.Windows.Forms.TextBox numeroAlbaranTxt;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.TextBox debugTxt;
+        private System.Windows.Forms.ListBox logListBox;
         private System.Windows.Forms.TextBox paisClienteTxt;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label6;
