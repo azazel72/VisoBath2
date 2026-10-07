@@ -25,14 +25,21 @@ namespace VisoBath
 		public List<Albaran> result { get; set; }
 		public string statusCode { get; set; }
 		public string statusText { get; set; }
-		public ResultadoMensaje infoMsg { get; set; }
-		public ResultadoMensaje errorMsg { get; set; }
+		public ResultadoMensajeInfo infoMsg { get; set; }
+		public ResultadoMensajeMsg errorMsg { get; set; }
 	}
 
-	public class ResultadoMensaje
+	public class ResultadoMensajeInfo
 	{
 		public string message { get; set; }
 		public int code { get; set; }
 	}
+
+    public class ResultadoMensajeMsg
+    {
+        public string message { get; set; }
+        public string code { get; set; }
+    }
+
 }
 
