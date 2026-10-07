@@ -294,14 +294,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="VisoBath.exe" size="145408">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="VisoBath.exe" size="157184">
       <assemblyIdentity name="VisoBath" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>KL9twPWdWoakh5gsurswmtHYf0k//Gj6U14TNiN7GDA=</dsig:DigestValue>
+        <dsig:DigestValue>PLN7SEW+xjZOIhcieDeQ+aCZyEFRvvzNrK45eLzyCCg=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

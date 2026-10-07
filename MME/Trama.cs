@@ -131,9 +131,9 @@ namespace VisoBath.MME
             {
                 return new DateTime((entero64(cadena, inicio) / 100) + bias);
             }
-            catch (System.ArgumentOutOfRangeException)
+            catch (System.ArgumentOutOfRangeException ex)
             {
-                ErrorLogger.Add("Error (fecha Trama): argumento fuera de rango");
+                ErrorLogger.Add("Error (fecha Trama): argumento fuera de rango", ex);
                 return new DateTime(0);
             }
         }

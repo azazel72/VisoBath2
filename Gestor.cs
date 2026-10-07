@@ -25,7 +25,6 @@ namespace VisoBath
         private int altoMedido = 0;
         private int anchoMedido = 0;
         private int largoMedido = 0;
-        private bool actualizandoTipoConector = false;
         private bool inicializandoLog = false;
 
         public Gestor()
@@ -174,41 +173,6 @@ namespace VisoBath
                 actualizarImpresora();
             }
 
-            Action actualizarConector = () =>
-            {
-                if (this.tipoConectorCombo.Items.Count == 0)
-                {
-                    return;
-                }
-
-                string valor = string.IsNullOrWhiteSpace(this.configuracion.selector_conexion) ? "SG" : this.configuracion.selector_conexion;
-                int indice = this.tipoConectorCombo.Items.IndexOf(valor);
-                if (indice < 0)
-                {
-                    indice = 0;
-                    valor = this.tipoConectorCombo.Items[0].ToString();
-                    this.configuracion.selector_conexion = valor;
-                }
-
-                if (this.tipoConectorCombo.SelectedIndex != indice)
-                {
-                    this.actualizandoTipoConector = true;
-                    this.tipoConectorCombo.SelectedIndex = indice;
-                    this.actualizandoTipoConector = false;
-                }
-            };
-
-            if (this.tipoConectorCombo.InvokeRequired)
-            {
-                this.tipoConectorCombo.BeginInvoke((MethodInvoker)delegate ()
-                {
-                    actualizarConector();
-                });
-            }
-            else
-            {
-                actualizarConector();
-            }
         }
 
         /// <summary>
@@ -346,7 +310,7 @@ namespace VisoBath
                 //si no disponemos del albaran, consultar el codigo del albaran en la base de datos
                 bloquearFormulario(true);
                 Estado("Solicitando información del albarán.");
-                _ = ConectorFactory.SolicitarAlbaran(this, codigo, this.configuracion.selector_conexion);
+                _ = ConectorFactory.SolicitarAlbaran(this, codigo);
             }
             else
             {
@@ -366,17 +330,44 @@ namespace VisoBath
 
         public void NuevoAlbaran(Albaran albaran)
         {
+            if (this.InvokeRequired)
+            {
+                this.BeginInvoke((MethodInvoker)delegate ()
+                {
+                    NuevoAlbaran(albaran);
+                });
+                return;
+            }
+
+            if (this.albaranes.Buscar(albaran.numeroAlbaran) != null)
+            {
+                Estado("El albarán ya estaba cargado.");
+                return;
+            }
+
+            if (albaran.estado == 0)
+            {
+                albaran.bultoActual = Math.Max(0, albaran.bultoActual - 1);
+            }
+
+            if (albaran.totalBultos > 0)
+            {
+                albaran.FijarBultos(albaran.totalBultos);
+            }
+
+            int r = ConectorSQLite.InsertarAlbaran(albaran);
+            if (r != 1)
+            {
+                MessageBox.Show("No se pudo guardar el albarán en la BBDD. Error nº: " + r.ToString(), "Error en la BBDD", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
             //agregamos al listado en memoria
             this.albaranes.Agregar(albaran);
             //agregamos al listado en pantalla
             this.AgregarAlbaran(albaran, true);
-            //si el albaran ya tiene el total de bultos, ejecutamos la funcion de fijar
-            if (albaran.totalBultos > 0)
-            {
-                this.totalBultosTxt.Value = albaran.totalBultos;
-                // Simular el click del botón Fijar (ejecutar la lógica existente)
-                this.FijarBultosBtn_Click(this.FijarBultosBtn, EventArgs.Empty);
-            }
+            this.MostrarFormulario(albaran);
+            Estado("Albarán guardado en la BBDD.");
         }
 
         /// <summary>
@@ -402,19 +393,9 @@ namespace VisoBath
             this.provinciaClienteTxt.Text = albaran.nombreProvincia;
             this.paisClienteTxt.Text = albaran.pais;
 
-            //comprobacion bultos
-            if (albaran.totalBultos == 0)
-            {
-                this.totalBultosTxt.Value = 0;
-                this.totalBultosTxt.Enabled = true;
-                this.FijarBultosBtn.Enabled = true;
-            }
-            else
-            {
-                this.totalBultosTxt.Value = albaran.totalBultos;
-                this.totalBultosTxt.Enabled = false;
-                this.FijarBultosBtn.Enabled = false;
-            }
+            this.totalBultosTxt.Value = albaran.totalBultos;
+            this.totalBultosTxt.Enabled = false;
+            this.FijarBultosBtn.Enabled = false;
 
             //calculo del proximo bulto
             if (albaran.bultoActual != albaran.totalBultos)
@@ -520,6 +501,7 @@ namespace VisoBath
                 palet.ancho = this.anchoMedido;
                 palet.largo = this.largoMedido;
                 palet.numeroAlbaran = albaran.numeroAlbaran;
+                bool estabaFinalizado = albaran.estado == 1;
                 albaran.AgregarPalet(palet);
                 //actualizar bbdd
                 int r = ConectorSQLite.InsertarPalet(palet);
@@ -549,9 +531,10 @@ namespace VisoBath
                 this.largoMedido = 0;
 
                 //Etiquetas.ImprimirEtiqueta(this, albaran, palet);
-                if (albaran.estado == 1)
+                // SAP recibe el albaran completo una sola vez, al medir el ultimo palet.
+                if (!estabaFinalizado && albaran.estado == 1)
                 {
-                    ConectorFactory.EnviarNotificacion(this, albaran, this.configuracion.selector_conexion);
+                    _ = ConectorFactory.EnviarNotificacion(this, albaran);
                 }
             }
         }
@@ -638,7 +621,7 @@ namespace VisoBath
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.Message);
+                    ErrorLogger.Add("Error (seleccionar etiqueta): " + ex.Message, ex);
                 }
             }
             this.listadoPalets.Enabled = true;
@@ -734,20 +717,7 @@ namespace VisoBath
 
         private void tipoConectorCombo_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (this.actualizandoTipoConector || this.tipoConectorCombo.SelectedItem == null)
-            {
-                return;
-            }
-
-            string seleccionado = this.tipoConectorCombo.SelectedItem.ToString();
-            if (seleccionado == this.configuracion.selector_conexion)
-            {
-                return;
-            }
-
-            this.configuracion.selector_conexion = seleccionado;
-            this.configuracion.Save();
-            Estado("Conector ERP establecido en " + seleccionado + ".");
+            // La aplicacion trabaja exclusivamente con SAP.
         }
 
         private void totalBultosTxt_ValueChanged(object sender, EventArgs e)

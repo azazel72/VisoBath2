@@ -1,5 +1,6 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
 using System.IO;
@@ -19,11 +20,11 @@ namespace VisoBath
         private const string NombreBBDD = "visobath.sqlite";
 
         //creacion de tablas
-        private const string crearTablaAlbaranes = "CREATE TABLE IF NOT EXISTS albaranes (numeroAlbaran NVARCHAR(20) PRIMARY KEY, numeroPedido INTEGER DEFAULT 0, fechaAlbaran NVARCHAR(20)," +
+        private const string crearTablaAlbaranes = "CREATE TABLE IF NOT EXISTS albaranes (numeroAlbaran NVARCHAR(20) PRIMARY KEY, numeroPedido INTEGER DEFAULT 0, fechaAlbaran NVARCHAR(40)," +
             "nombreEmpresa NVARCHAR(100), dirEmpresa NVARCHAR(100), cpEmpresa INTEGER, " +
             "razonSocial NVARCHAR(100), direccion NVARCHAR(100), poblacion NVARCHAR(100), provincia NVARCHAR(10), nombreProvincia NVARCHAR(100), pais NVARCHAR(50), telefono NVARCHAR(20), email NVARCHAR(100)," +
-            "totalBultos INTEGER DEFAULT 0, bultoActual INTEGER DEFAULT 0,  fechaIniciado NVARCHAR(20) DEFAULT '', fechaFinalizado NVARCHAR(20) DEFAULT '', estado INTEGER DEFAULT 0)";
-        private const string crearTablaPalets = "CREATE TABLE IF NOT EXISTS palets (numero INTEGER DEFAULT 1, hora NVARCHAR(20), " +
+            "totalBultos INTEGER DEFAULT 0, bultoActual INTEGER DEFAULT 0,  fechaIniciado NVARCHAR(40) DEFAULT '', fechaFinalizado NVARCHAR(40) DEFAULT '', estado INTEGER DEFAULT 0)";
+        private const string crearTablaPalets = "CREATE TABLE IF NOT EXISTS palets (numero INTEGER DEFAULT 1, hora NVARCHAR(40), " +
             "peso INTEGER, volumen INTEGER, alto INTEGER DEFAULT 0, ancho INTEGER DEFAULT 0, largo INTEGER DEFAULT 0, numeroAlbaran NVARCHAR(20), estado INTEGER DEFAULT 0, " +
             "PRIMARY KEY (numeroAlbaran, numero), FOREIGN KEY (numeroAlbaran) REFERENCES albaranes(numeroAlbaran) ON DELETE CASCADE)";
         private const string crearTablaConfiguracion = "CREATE TABLE IF NOT EXISTS configuracion (indice INTEGER PRIMARY KEY DEFAULT 0, nombreImpresora NVARCHAR(200))";
@@ -65,14 +66,15 @@ namespace VisoBath
                 SQLiteConnection conector = GetConector();
                 new SQLiteCommand(crearTablaAlbaranes, conector).ExecuteNonQuery();
                 new SQLiteCommand(crearTablaPalets, conector).ExecuteNonQuery();
+                AsegurarDimensionesPalets(conector);
                 new SQLiteCommand(crearTablaConfiguracion, conector).ExecuteNonQuery();
                 new SQLiteCommand(crearTablaRegistros, conector).ExecuteNonQuery();
                 conector.Close();
                 return true;
             }
-            catch (MySqlException ex)
+            catch (Exception ex)
             {
-                string error = "Error (conexion bbdd): " + ex.Number.ToString() + " - " + ex.Message;
+                string error = "Error (conexion bbdd): " + ex.Message;
                 ErrorLogger.Add(error, ex);
                 gestor.Estado(error);
                 MessageBox.Show(error, "Error en la BBDD", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -186,6 +188,29 @@ namespace VisoBath
             var db = new SQLiteConnection(string.Format("Data Source={0};Version=3;", NombreBBDD));
             db.Open();
             return db;
+        }
+
+        private static void AsegurarDimensionesPalets(SQLiteConnection conector)
+        {
+            var columnas = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            using (var comando = new SQLiteCommand("PRAGMA table_info(palets);", conector))
+            using (var datos = comando.ExecuteReader())
+            {
+                while (datos.Read())
+                {
+                    columnas.Add(datos.GetString(1));
+                }
+            }
+
+            string[] dimensiones = { "alto", "ancho", "largo" };
+            foreach (string dimension in dimensiones)
+            {
+                if (!columnas.Contains(dimension))
+                {
+                    string sql = string.Format("ALTER TABLE palets ADD COLUMN {0} INTEGER DEFAULT 0;", dimension);
+                    new SQLiteCommand(sql, conector).ExecuteNonQuery();
+                }
+            }
         }
     }
 }

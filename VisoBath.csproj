@@ -270,6 +270,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\logo_mme.png" />
+    <None Include="Resources\sap_logo.png" />
   </ItemGroup>
   <ItemGroup>
     <WebReferences Include="Web References\" />

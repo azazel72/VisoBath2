@@ -13,7 +13,7 @@ namespace VisoBath
 
         private const string ConfigFileName = "configuracion.json";
         private const string DefaultUrl = "http://192.78.70.230:8080/WSVolumetricas.asmx";
-        private const string DefaultSelector = "SG";
+        private const string DefaultSelector = "SAP";
 
         public Configuracion()
         {
@@ -53,8 +53,9 @@ namespace VisoBath
 
                 return configuracion;
             }
-            catch
+            catch (Exception ex)
             {
+                ErrorLogger.Add("Error al cargar configuración: " + ex.Message, ex);
                 return new Configuracion();
             }
         }
@@ -76,9 +77,9 @@ namespace VisoBath
                 });
                 File.WriteAllText(GetConfigPath(), json);
             }
-            catch
+            catch (Exception ex)
             {
-                // Ignorado: no debemos bloquear la aplicación si no se puede guardar
+                ErrorLogger.Add("Error al guardar configuración: " + ex.Message, ex);
             }
         }
 
@@ -94,7 +95,7 @@ namespace VisoBath
                 ? DefaultSelector
                 : value.Trim().ToUpperInvariant();
 
-            if (conexionNormalizada != "SG" && conexionNormalizada != "SAP")
+            if (conexionNormalizada != "SAP")
             {
                 conexionNormalizada = DefaultSelector;
             }

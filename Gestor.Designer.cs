@@ -102,6 +102,7 @@
             this.eliminarBtn = new System.Windows.Forms.Button();
             this.grupoConfiguracion = new System.Windows.Forms.GroupBox();
             this.button2 = new System.Windows.Forms.Button();
+            this.logoSAP = new System.Windows.Forms.PictureBox();
             this.testigoServidor = new System.Windows.Forms.Label();
             this.tipoConectorCombo = new System.Windows.Forms.ComboBox();
             this.labelTipoConector = new System.Windows.Forms.Label();
@@ -120,12 +121,13 @@
             this.grupoActivos.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.listadoAlbaranes)).BeginInit();
             this.grupoConfiguracion.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.logoSAP)).BeginInit();
             this.SuspendLayout();
             // 
             // tVersion
             // 
             this.tVersion.AutoSize = true;
-            this.tVersion.Location = new System.Drawing.Point(1123, 9);
+            this.tVersion.Location = new System.Drawing.Point(1150, 56);
             this.tVersion.Name = "tVersion";
             this.tVersion.Size = new System.Drawing.Size(50, 13);
             this.tVersion.TabIndex = 11;
@@ -176,8 +178,9 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.Gray;
-            this.panel1.Controls.Add(this.pictureBox1);
             this.panel1.Controls.Add(this.tVersion);
+            this.panel1.Controls.Add(this.pictureBox1);
+            this.panel1.Controls.Add(this.logoSAP);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
@@ -571,7 +574,7 @@
             // 
             // monthCalendar1
             // 
-            this.monthCalendar1.Location = new System.Drawing.Point(985, 178);
+            this.monthCalendar1.Location = new System.Drawing.Point(985, 169);
             this.monthCalendar1.Name = "monthCalendar1";
             this.monthCalendar1.TabIndex = 19;
             // 
@@ -822,14 +825,14 @@
             this.grupoConfiguracion.Controls.Add(this.nombreImpresoraTxt);
             this.grupoConfiguracion.Location = new System.Drawing.Point(965, 98);
             this.grupoConfiguracion.Name = "grupoConfiguracion";
-            this.grupoConfiguracion.Size = new System.Drawing.Size(226, 75);
+            this.grupoConfiguracion.Size = new System.Drawing.Size(226, 59);
             this.grupoConfiguracion.TabIndex = 25;
             this.grupoConfiguracion.TabStop = false;
             this.grupoConfiguracion.Text = "Configuración";
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(37, 45);
+            this.button2.Location = new System.Drawing.Point(37, 26);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(183, 23);
             this.button2.TabIndex = 1001;
@@ -837,11 +840,21 @@
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
+            // logoSAP
+            // 
+            this.logoSAP.Image = global::VisoBath.Properties.Resources.sap_logo;
+            this.logoSAP.Location = new System.Drawing.Point(1029, 12);
+            this.logoSAP.Name = "logoSAP";
+            this.logoSAP.Size = new System.Drawing.Size(171, 57);
+            this.logoSAP.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.logoSAP.TabIndex = 28;
+            this.logoSAP.TabStop = false;
+            // 
             // testigoServidor
             // 
             this.testigoServidor.BackColor = System.Drawing.Color.LimeGreen;
             this.testigoServidor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.testigoServidor.Location = new System.Drawing.Point(7, 49);
+            this.testigoServidor.Location = new System.Drawing.Point(7, 30);
             this.testigoServidor.Name = "testigoServidor";
             this.testigoServidor.Size = new System.Drawing.Size(13, 13);
             this.testigoServidor.TabIndex = 27;
@@ -852,12 +865,12 @@
             this.tipoConectorCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.tipoConectorCombo.FormattingEnabled = true;
             this.tipoConectorCombo.Items.AddRange(new object[] {
-            "SG",
             "SAP"});
             this.tipoConectorCombo.Location = new System.Drawing.Point(103, 18);
             this.tipoConectorCombo.Name = "tipoConectorCombo";
             this.tipoConectorCombo.Size = new System.Drawing.Size(109, 21);
             this.tipoConectorCombo.TabIndex = 19;
+            this.tipoConectorCombo.Visible = false;
             this.tipoConectorCombo.SelectedIndexChanged += new System.EventHandler(this.tipoConectorCombo_SelectedIndexChanged);
             // 
             // labelTipoConector
@@ -868,6 +881,7 @@
             this.labelTipoConector.Size = new System.Drawing.Size(91, 13);
             this.labelTipoConector.TabIndex = 18;
             this.labelTipoConector.Text = "Tipo de conector:";
+            this.labelTipoConector.Visible = false;
             // 
             // nombreImpresoraTxt
             // 
@@ -931,6 +945,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.listadoAlbaranes)).EndInit();
             this.grupoConfiguracion.ResumeLayout(false);
             this.grupoConfiguracion.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.logoSAP)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -996,6 +1011,7 @@
         private System.Windows.Forms.Label nombreImpresoraTxt;
         private System.Windows.Forms.Button seleccionarImpresoraBtn;
         private System.Windows.Forms.ComboBox tipoConectorCombo;
+        private System.Windows.Forms.PictureBox logoSAP;
         private System.Windows.Forms.Label labelTipoConector;
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.TextBox numeroPedidoTxt;

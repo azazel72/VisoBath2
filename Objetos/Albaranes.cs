@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Data.SQLite;
+using System.Globalization;
 using System.Linq;
 using System.Text.Json.Serialization;
 
@@ -41,7 +42,7 @@ namespace VisoBath
                 while (datos.Read())
                 {
                     Albaran albaran = new Albaran(datos);
-                    this.albaranes.Add(albaran.numeroAlbaran, albaran);
+                    this.Agregar(albaran);
                 }
                 datos.Close();
             }
@@ -78,6 +79,7 @@ namespace VisoBath
 
     public class Albaran
     {
+        private const string FormatoFecha = "yyyy-MM-dd'T'HH:mm:sszzz";
         public string numeroAlbaran { get; set; }
         public int numeroPedido { get; set; }
         public string fechaAlbaran { get; set; }
@@ -96,6 +98,7 @@ namespace VisoBath
         public string email { get; set; }
 
         public int totalBultos { get; set; }
+        [JsonPropertyName("bultoactual")]
         public int bultoActual { get; set; }
         public string fechaIniciado { get; set; }
         public string fechaFinalizado { get; set; }
@@ -142,7 +145,7 @@ namespace VisoBath
         public void FijarBultos(int totalBultos)
         {
             this.totalBultos = totalBultos;
-            this.fechaIniciado = DateTime.Now.ToString();
+            this.fechaIniciado = DateTimeOffset.Now.ToString(FormatoFecha, CultureInfo.InvariantCulture);
         }
 
         public void AgregarPalet(Palet palet)
@@ -161,7 +164,7 @@ namespace VisoBath
                 }
                 if (this.bultoActual == this.totalBultos)
                 {
-                    this.fechaFinalizado = DateTime.Now.ToString();
+                    this.fechaFinalizado = DateTimeOffset.Now.ToString(FormatoFecha, CultureInfo.InvariantCulture);
                     this.estado = 1;
                 }
             }
@@ -250,6 +253,7 @@ namespace VisoBath
 
     public class Palet
     {
+        private const string FormatoHora = "yyyy-MM-dd'T'HH:mm:sszzz";
         public int numero { get; set; }
         public string hora { get; set; }
         public int peso { get; set; }
@@ -262,7 +266,7 @@ namespace VisoBath
 
         public Palet()
         {
-            this.hora = DateTime.Now.ToString();
+            this.hora = DateTimeOffset.Now.ToString(FormatoHora, CultureInfo.InvariantCulture);
         }
 
         public Palet(SQLiteDataReader datos)

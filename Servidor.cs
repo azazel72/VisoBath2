@@ -96,7 +96,7 @@ namespace VisoBath
                         }
                         catch (Exception e)
                         {
-                            //   this.gestor.EscribirError("Error (Crear Servidor Automatas, Bucle interno): " + origen + " - " + e.StackTrace);
+                            this.gestor.Log("Error (Servidor Automatas, Bucle interno): " + origen + " - " + e.Message, e);
                             this.gestor.EncenderTestigo(false);
                             Thread.Sleep(1000);
                         }

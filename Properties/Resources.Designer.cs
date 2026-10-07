@@ -79,6 +79,16 @@ namespace VisoBath.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap sap_logo {
+            get {
+                object obj = ResourceManager.GetObject("sap_logo", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
         
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
