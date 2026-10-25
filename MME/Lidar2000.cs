@@ -22,7 +22,8 @@ namespace VisoBath.MME
         private int puertoSensor;
         private string manejador;
         private bool registrar = false;
-        public Medidas2000 medidas = new Medidas2000();
+        public Medidas2000 medidas;
+        private readonly PerfilMaquina perfil;
 
         //comandos
         private string plantilla_set_parameter = "http://{0}/cmd/set_parameter?{1}";
@@ -65,8 +66,15 @@ namespace VisoBath.MME
 
 
         public Lidar2000(string ip)
+            : this(ip, PerfilMaquina.Crear("B"))
+        {
+        }
+
+        public Lidar2000(string ip, PerfilMaquina perfil)
         {
             this.ipSensor = ip;
+            this.perfil = perfil;
+            this.medidas = new Medidas2000(perfil: perfil);
         }
 
         public void Activar(Action<object> funcionOK = null, Action<object> funcionKO = null, bool primeraVez = true)
@@ -78,7 +86,7 @@ namespace VisoBath.MME
             */
             //preparamos el sensor
             //this.SetParametros("ccw", "20", "720", "A", "-765000", "153", "1", "10000", funcionOK, funcionKO, primeraVez);
-            this.SetParametros("ccw", "20", "720", "A", "135000", "153", "1", "10000", funcionOK, funcionKO, primeraVez);
+            this.SetParametros("ccw", "20", "720", "A", this.perfil.AnguloInicial.ToString(System.Globalization.CultureInfo.InvariantCulture), "153", "1", "10000", funcionOK, funcionKO, primeraVez);
 
         }
 

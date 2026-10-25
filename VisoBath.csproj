@@ -184,6 +184,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Conectores\ConectorFactory.cs" />
+    <Compile Include="Conectores\ProtocoloMaquina.cs" />
     <Compile Include="Conectores\ConectorSAP.cs" />
     <Compile Include="Conectores\ConectorSOAP.cs" />
     <Compile Include="Conectores\IConectorERP.cs" />
@@ -197,6 +198,7 @@
     <Compile Include="Impresion\Etiquetas.cs" />
     <Compile Include="Impresion\RawPrinterHelper.cs" />
     <Compile Include="MME\Lidar2000.cs" />
+    <Compile Include="MME\PerfilMaquina.cs" />
     <Compile Include="MME\Lidar2300.cs" />
     <Compile Include="MME\Medidas2300.cs" />
     <Compile Include="MME\Respuestas.cs" />

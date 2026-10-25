@@ -16,11 +16,14 @@ namespace VisoBath.MME
         public List<float[,]> coordenadas;
 
         public int numPuntos = 1;
+        private readonly float distanciaEje;
 
-        public Medidas2000(int puntos = 153)
+        public Medidas2000(int puntos = 153, PerfilMaquina perfil = null)
         {
+            perfil = perfil ?? PerfilMaquina.Crear("B");
+            this.distanciaEje = perfil.DistanciaEje;
             //calculamos el desplazamiento del angulo de inicio en radianes
-            this.arcoInicial = (Math.PI / 180) * -76.5; // 13.5; -76.5 grados
+            this.arcoInicial = perfil.AnguloCalculo;
             this.arcoAvance = 0.017453292519943296 * 0.5; //medio grado en radianes
             this.arcoSeccion = 0;
             this.numPuntos = puntos;
@@ -226,7 +229,7 @@ namespace VisoBath.MME
                         float z = 2470 + (float)(Math.Sin(arcoInicial + arcoA) * v);
                         z = z < 50 ? 0 : z;
                         //xy > Se usa el coseno, que en este caso es positivo, por lo que se resta de la distancia al centro
-                        float xy = 1520 - (float)(Math.Cos(arcoInicial + arcoA) * v);
+                        float xy = this.distanciaEje - (float)(Math.Cos(arcoInicial + arcoA) * v);
                         xy = xy < 0 ? 0 : xy;
 
                         //solo si la profundidad no supera el eje ...

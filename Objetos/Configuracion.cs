@@ -10,6 +10,7 @@ namespace VisoBath
         public string nombreImpresora { get; set; }
         public string url_conexion { get; set; }
         public string selector_conexion { get; set; }
+        public string configuracion_maquina { get; set; }
 
         private const string ConfigFileName = "configuracion.json";
         private const string DefaultUrl = "http://192.78.70.230:8080/WSVolumetricas.asmx";
@@ -20,6 +21,7 @@ namespace VisoBath
             this.nombreImpresora = "";
             this.url_conexion = DefaultUrl;
             this.selector_conexion = DefaultSelector;
+            this.configuracion_maquina = "B";
         }
 
         public static Configuracion Load()
@@ -48,7 +50,8 @@ namespace VisoBath
                 {
                     nombreImpresora = data.NombreImpresora ?? string.Empty,
                     url_conexion = string.IsNullOrWhiteSpace(data.UrlConexion) ? DefaultUrl : data.UrlConexion,
-                    selector_conexion = ValidateSelector(data.SelectorConexion)
+                    selector_conexion = ValidateSelector(data.SelectorConexion),
+                    configuracion_maquina = data.ConfiguracionMaquina ?? "B"
                 };
 
                 return configuracion;
@@ -68,7 +71,8 @@ namespace VisoBath
                 {
                     NombreImpresora = this.nombreImpresora ?? string.Empty,
                     UrlConexion = string.IsNullOrWhiteSpace(this.url_conexion) ? DefaultUrl : this.url_conexion,
-                    SelectorConexion = ValidateSelector(this.selector_conexion)
+                    SelectorConexion = ValidateSelector(this.selector_conexion),
+                    ConfiguracionMaquina = this.configuracion_maquina ?? "B"
                 };
 
                 string json = JsonSerializer.Serialize(data, new JsonSerializerOptions
@@ -105,6 +109,8 @@ namespace VisoBath
 
         private class PersistedConfig
         {
+            [JsonPropertyName("configuracion_maquina")]
+            public string ConfiguracionMaquina { get; set; }
             [JsonPropertyName("nombreImpresora")]
             public string NombreImpresora { get; set; }
             [JsonPropertyName("url_conexion")]

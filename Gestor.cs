@@ -16,9 +16,7 @@ namespace VisoBath
         private Albaranes albaranes;
         //private Lidar2300 lidar;
         private Lidar2000 lidar;
-        private enum Status { INICIADO, MIDIENDO, PARADO }
-        private Status estado;
-        private int contadorVueltas;
+        private IProtocoloMaquina protocoloMaquina;
         private DateTime registro_fecha;
 
         private int pesoEstable = 0;
@@ -44,13 +42,16 @@ namespace VisoBath
             InicializarLog();
             Task carga = new Task(CargarDatos);
             carga.Start();
-            this.servidor = new Servidor(this);
-            this.servidor.Iniciar();
+            var perfil = PerfilMaquina.Crear(this.configuracion.configuracion_maquina);
+            this.tVersion.Text = "v3.003 - " + perfil.Modo;
+            this.protocoloMaquina = perfil.Modo == "A"
+                ? (IProtocoloMaquina)new ProtocoloMaquinaA() : new ProtocoloMaquinaB();
             //this.lidar = new Lidar2300("169.254.244.116");
-            this.lidar = new Lidar2000("192.78.70.173");
+            this.lidar = new Lidar2000(perfil.IpLidar, perfil);
             //this.lidar = new Lidar2000("192.168.0.9");
             this.lidar.Activar();
-            this.estado = Status.PARADO;
+            this.servidor = new Servidor(this);
+            this.servidor.Iniciar();
         }
 
         private void InicializarLog()
@@ -347,7 +348,8 @@ namespace VisoBath
 
             if (albaran.estado == 0)
             {
-                albaran.bultoActual = Math.Max(0, albaran.bultoActual - 1);
+                // Asumimos que el primer bulto pendiente es el 1, independientemente del valor recibido.
+                albaran.bultoActual = 0;
             }
 
             if (albaran.totalBultos > 0)
@@ -657,36 +659,32 @@ namespace VisoBath
         public void AccionRecibida(NotificacionPLC notificacion)
         {
            // Console.WriteLine(notificacion.accion);
-            switch (notificacion.accion)
+            switch (this.protocoloMaquina.Interpretar(notificacion))
             {
-                case "inicio":
+                case AccionMaquina.Iniciar:
                     //boton de inicio, recogemos las tramas
                     this.lidar.Iniciar();
-                    this.contadorVueltas = 0;
                     Console.WriteLine(this.lidar.Tramas());
-                    this.estado = Status.INICIADO;
                     Console.WriteLine("Iniciando sensor");
                     break;
-                case "peso":
+                case AccionMaquina.Peso:
                     Console.WriteLine("Peso: " + notificacion.valor.ToString());
                     Estado("Peso: " + notificacion.valor.ToString());
                     this.pesoEstable = notificacion.valor;
                     break;
-                case "vuelta":
-                    if (this.estado == Status.INICIADO)
-                    {
-                        this.contadorVueltas++;
-                        if (this.contadorVueltas > 1)
-                        {
-                            this.estado = Status.MIDIENDO;
-                            this.lidar.Registrar(true);
-
-                            Console.WriteLine("INICIAR recogida");
-                        }
-                    }
-                    else if (this.estado == Status.MIDIENDO)
-                    {
-                        this.estado = Status.PARADO;
+                case AccionMaquina.Capturar:
+                    this.lidar.Registrar(true);
+                    Console.WriteLine("INICIAR recogida");
+                    break;
+                case AccionMaquina.Cancelar:
+                    this.lidar.Registrar(false);
+                    this.lidar.Parar();
+                    this.lidar.medidas.Vaciar();
+                    this.pesoEstable = 0;
+                    this.altoMedido = this.anchoMedido = this.largoMedido = 0;
+                    Estado("Medicion cancelada por paro o secuencia de vueltas incompleta.");
+                    break;
+                case AccionMaquina.Completar:
                         Console.WriteLine("PARAR sensor");
 
                         this.lidar.Registrar(false);
@@ -705,7 +703,6 @@ namespace VisoBath
                             string resumen = "Peso: " + this.pesoEstable + ", Volumen: " + vol.ToString() + ", Lado 1: " + lado1.ToString() + ", Lado 2: " + lado2.ToString() + ", Altura: " + datos[0].ToString();
                             Console.WriteLine(resumen);                        
                         }
-                    }
                     break;
             }
         }
