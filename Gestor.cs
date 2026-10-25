@@ -43,7 +43,7 @@ namespace VisoBath
             Task carga = new Task(CargarDatos);
             carga.Start();
             var perfil = PerfilMaquina.Crear(this.configuracion.configuracion_maquina);
-            this.tVersion.Text = "v3.003 - " + perfil.Modo;
+            this.tVersion.Text = "v3.003" + perfil.Modo;
             this.protocoloMaquina = perfil.Modo == "A"
                 ? (IProtocoloMaquina)new ProtocoloMaquinaA() : new ProtocoloMaquinaB();
             //this.lidar = new Lidar2300("169.254.244.116");

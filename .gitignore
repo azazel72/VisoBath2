@@ -26,6 +26,7 @@ bld/
 [Bb]in/
 [Oo]bj/
 obj/Debug/
+obj/Release/
 [Ll]og/
 
 # Visual Studio 2015/2017 cache/options directory

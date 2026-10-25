@@ -53,7 +53,7 @@ namespace VisoBath.Conectores
                 if (tira != null)
                 {
                     string jsonBody = string.Format(jsonAlbaranSAP, tira, codigo);
-                    ErrorLogger.Add("SAP envio (SolicitarAlbaran): " + jsonBody);
+                    ErrorLogger.Add("SAP envio (SolicitarAlbaran): " + jsonBody.Replace(tira, "[OCULTA]"));
                     using (var cts = new CancellationTokenSource(TimeSpan.FromSeconds(30)))
                     {
                         var resultado = await _conectorSOAP.SalidaDatosAsync(jsonBody, cts.Token).ConfigureAwait(false);
@@ -94,7 +94,7 @@ namespace VisoBath.Conectores
                 if (tira != null)
                 {
                     Notificacion notificacion = new Notificacion(tira, albaran);
-                    ErrorLogger.Add("SAP envio (EnviarNotificacion, payload original): " + JsonSerializer.Serialize<Notificacion>(notificacion));
+                    ErrorLogger.Add("SAP envio (EnviarNotificacion, payload original): " + JsonSerializer.Serialize<Notificacion>(notificacion).Replace(tira, "[OCULTA]"));
                     notificacion.palets = notificacion.palets
                         .Select(p =>
                         {
@@ -105,7 +105,7 @@ namespace VisoBath.Conectores
                         .ToList();
 
                     string jsonBody = JsonSerializer.Serialize<Notificacion>(notificacion);
-                    ErrorLogger.Add("SAP envio (EnviarNotificacion): " + jsonBody);
+                    ErrorLogger.Add("SAP envio (EnviarNotificacion): " + jsonBody.Replace(tira, "[OCULTA]"));
                     using (var cts = new CancellationTokenSource(TimeSpan.FromSeconds(30)))
                     {
                         string resultado = await _conectorSOAP.EntradaDatosAsync(jsonBody, cts.Token).ConfigureAwait(false);
